@@ -1,0 +1,155 @@
+% --- MODULE 9: Exercise & Challenge Solutions ---
+% --- Sourced from Lecture Slides & CLRS ---
+
+\section*{Module 9: Exercise \& Challenge Solutions}
+This module contains the solutions to the exercises and challenges presented in the lecture slides.
+
+\subsection*{Module 2: Stacks \& Queues}
+
+\subsubsection*{Problem: Efficient Array-Based Queue (Lec 8, Slide 54)}
+\begin{itemize}
+    \item \textbf{Problem:} Provide an efficient array-based implementation of a queue that requires $O(n)$ space (where $n$ is max size) but $n$ is not known beforehand.
+    \item \textbf{Solution Idea:} Combine two techniques from the lectures.
+    \begin{enumerate}
+        \item \textbf{Circular Array (Lec 8):} Use `front` and `back` indices with the modulo operator (`\% N`, where $N$ is array capacity). This makes `Dequeue` an $O(1)$ operation by just moving the `front` pointer, avoiding an $O(N)$ shift.
+        \item \textbf{Doubling/Halving (Lec 9):} To handle unknown size, start with a small array.
+        \begin{itemize}
+            \item \textbf{On `Enqueue`:} If the array is full, create a new array of double the size ($2N$) and copy the $N$ elements over. This gives an amortized $O(1)$ cost.
+            \item \textbf{On `Dequeue`:} If the number of elements falls below $N/4$, create a new array of half the size ($N/2$) and copy the elements. This prevents "thrashing" and maintains the amortized $O(1)$ cost.
+        \end{itemize}
+    \end{enumerate}
+    \item \textbf{Result:} All operations (`Enqueue`, `Dequeue`) achieve $\mathbf{O(1)}$ amortized time complexity.
+\end{itemize}
+
+\subsection*{Module 3: Trees \& Traversals}
+
+\subsubsection*{Problem: Traversal via Stacks and Queues (Lec 14, Slide 31)}
+\begin{itemize}
+    \item \textbf{Level-Order (using a Queue):} This is the BFS algorithm.
+    \begin{enumerate}
+        \item Create a Queue, `q.enqueue(root)`.
+        \item While $q$ is not empty: $u = q.dequeue()$.
+        \item Visit $u$.
+        \item If `u.left != NULL`, `q.enqueue(u.left)`.
+        \item If `u.right != NULL`, `q.enqueue(u.right)`.
+    \end{enumerate}
+    \item \textbf{Preorder (using a Stack):}
+    \begin{enumerate}
+        \item Create a Stack, `s.push(root)`.
+        \item While $s$ is not empty: $u = s.pop()$.
+        \item Visit $u$.
+        \item If `u.right != NULL`, `s.push(u.right)`. (Push right first)
+        \item If `u.left != NULL`, `s.push(u.left)`. (Push left last)
+    \end{enumerate}
+    \item \textbf{Inorder (using a Stack):} This is the most complex iterative traversal.
+    \begin{enumerate}
+        \item Create a Stack $s$. `curr = root`.
+        \item While `curr != NULL` or $s$ is not empty:
+        \item \textbf{Go left:} While `curr != NULL`: `s.push(curr)`, `curr = curr.left`.
+        \item \textbf{Visit:} `curr = s.pop()`. Visit `curr`.
+        \item \textbf{Go right:} `curr = curr.right`.
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection*{Problem: Count Trees from Level-Order (Lec 14, Slide 32)}
+\begin{itemize}
+    \item \textbf{Challenge:} "How many binary trees have the sequence ABCDEFG as their level-order traversal?"
+    \item \textbf{Solution:} The level-order traversal sequence does \textit{not} uniquely define a binary tree, because it does not encode `NULL` children.
+    \item \textbf{Example 1:} A \textit{full, complete} tree: `A.left=B`, `A.right=C`, `B.left=D`, `B.right=E`, `C.left=F`, `C.right=G`. This produces `A B C D E F G`.
+    \item \textbf{Example 2:} A "path" tree: `A.right=B`, `B.right=C`, `C.right=D`, `D.right=E`, `E.right=F`, `F.right=G`. This also produces `A B C D E F G`.
+    \item \textbf{Conclusion:} There are many possible trees. However, as noted on Lec 14, Slide 47, if the tree is constrained to be an \textbf{Almost Complete Binary Tree}, the sequence uniquely defines \textbf{exactly one} tree.
+\end{itemize}
+
+\subsection*{Module 6: BSTs \& AVL Trees}
+
+\subsubsection*{Problem: Inorder Traversal of BST is Sorted (Lec 25, Slide 6)}
+\begin{itemize}
+    \item \textbf{Proof (by Induction):}
+    \item \textbf{Base Case:} $n=0$ (empty tree) or $n=1$ (root only). The traversal is empty or has one node, which is sorted.
+    \item \textbf{Inductive Hypothesis (IH):} Assume that for any BST with $k < n$ nodes, an inorder traversal produces a sorted list.
+    \item \textbf{Inductive Step (for $n$ nodes):} Let $T$ be a BST with $n$ nodes and root $r$. $T$'s left subtree $T\_L$ and right subtree $T\_R$ are both BSTs with $< n$ nodes.
+    \begin{enumerate}
+        \item By the \textbf{BST Invariant} (Lec 24), all keys in $T\_L$ are $\le r.\text{key}$, and all keys in $T\_R$ are $\ge r.\text{key}$.
+        \item An inorder traversal of $T$ is: `Inorder(T\_L)`, then `r.key`, then `Inorder(T\_R)`.
+        \item By the (IH), `Inorder(T\_L)` is a sorted list.
+        \item By the (IH), `Inorder(T\_R)` is a sorted list.
+        \item Combining these facts, the full traversal is: [sorted list $\le r$] + [$r$] + [sorted list $\ge r$].
+        \item This final combined list is fully sorted.
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection*{Problem: Find All Occurrences of Key k (Lec 25, Slide 17)}
+\begin{itemize}
+    \item \textbf{Problem:} Design an algorithm to find all occurrences of $k$.
+    \item \textbf{Solution Idea:} The standard `Search` stops at the first $k$. Since duplicates $\le k$ can be in the left subtree and $\ge k$ can be in the right, we must search both.
+    \item \textbf{Algorithm} `FindAll(node, k, results\_list)`:
+    \begin{enumerate}
+        \item If `node == NULL`, return.
+        \item If `k < node.key`:
+        \item `FindAll(node.left, k, results\_list)`
+        \item Else if `k > node.key`:
+        \item `FindAll(node.right, k, results\_list)`
+        \item Else (`k == node.key`):
+        \item `results\_list.add(node)`
+        \item `FindAll(node.left, k, results\_list)` (to find other $k$'s in left)
+        \item `FindAll(node.right, k, results\_list)` (to find other $k$'s in right)
+    \end{enumerate}
+    \item \textbf{Complexity:} $O(h + c)$, where $h$ is tree height and $c$ is the number of occurrences.
+\end{itemize}
+
+\subsubsection*{Problem: Compute Predecessor (Lec 25, Slide 32)}
+\begin{itemize}
+    \item \textbf{Problem:} Modify the `Successor` algorithm to compute `Predecessor(x)`.
+    \item \textbf{Solution Idea:} This is the symmetric (mirror-image) of `Successor`.
+    \item \textbf{Algorithm:}
+    \begin{enumerate}
+        \item \textbf{Case 1: If $x$ has a left subtree.}
+        The predecessor is the \texttt{Maximum()} node in $x$'s left subtree.
+        \item \textbf{Case 2: If $x$ has NO left subtree.}
+        Go up the tree using `parent` pointers. The predecessor is the \textbf{first ancestor} $y$ such that $x$ is in the \textbf{right subtree} of $y$.
+    \end{enumerate}
+    \item \textbf{Complexity:} $O(h)$.
+\end{itemize}
+
+\subsubsection*{Problem: Expected Height of Random BST (Lec 25, Slide 52)}
+\begin{itemize}
+    \item \textbf{Problem:} What is the expected height of a BST constructed from a random permutation of $\{1, \dots, n\}$?
+    \item \textbf{Solution (from CLRS 12.4):}
+    \item \textbf{Result:} The expected height is $\mathbf{O(\log n)}$.
+    \item \textbf{Proof Sketch:} Let $X\_n$ be the height of a random BST on $n$ nodes. Let $R$ be the rank of the key chosen as the root (with $P(R=i) = 1/n$).
+    \item The height of the tree is $1 + \max(X\_{i-1}, X\_{n-i})$, where $X\_{i-1}$ and $X\_{n-i}$ are the heights of the left/right subtrees.
+    \item The analysis of this recurrence (which is very similar to the analysis of randomized quicksort) shows that $E[X\_n] = O(\log n)$.
+\end{itemize}
+
+\subsubsection*{Problem: Maintain Subtree Size in BST (Lec 26, Slide 5)}
+\begin{itemize}
+    \item \textbf{Problem:} Update `Insert` and `Delete` to maintain the `size` field at every node.
+    \item \textbf{Solution (`size(x) = size(x.left) + size(x.right) + 1`):}
+    \item \textbf{Insert(z):}
+    \begin{enumerate}
+        \item Perform a normal BST insert. `size(z)` is initialized to 1.
+        \item As the search path is traversed *down* to find the insertion spot, increment the `size` of every node on that path.
+    \end{enumerate}
+    \item \textbf{Delete(z):}
+    \begin{enumerate}
+        \item Perform a normal BST delete. Let $y$ be the node that was physically removed (either $z$ or $z$'s successor).
+        \item Starting from `parent(y)`, walk *up* the tree to the root, decrementing the `size` of every node on that path.
+    \end{enumerate}
+    \item \textbf{Complexity:} Both operations remain $O(h)$.
+\end{itemize}
+
+\subsubsection*{Problem: AVL Rotation Height Proof (Lec 28, Slides 42, 47)}
+\begin{itemize}
+    \item \textbf{Problem:} In Case 1(a) (Right-Rotate) and Case 2(a) (Left-Rotate), prove the middle subtree (yellow box) must have height $h-3$.
+    \item \textbf{Proof (for Case 1a / Right-Rotate):}
+    \begin{enumerate}
+        \item Let $Y$ be the unbalanced node. Its height \textit{after} insertion is $h$.
+        \item Let $X$ be its left child. Since this is Case 1a, $X$ is left-heavy and $Y$ is unbalanced.
+        \item This means `h(X) = h-1` and `h(Y.right) = h-3`.
+        \item The imbalance was caused by an insertion into $X$'s left subtree, so $X$'s height just grew from $h-2$ to $h-1$.
+        \item Since $Y$ *was* balanced before the insert (when `h(X) = h-2`), its other child `Y.right` must have had height $h-3$ (as $h-2$ would also be balanced).
+        \item Since $X$ *was* balanced before the insert (at height $h-2$), and the insert occurred in its \textit{left} child (making it $h-2$), its \textit{right} child (the yellow box) must have had height $\le h-3$.
+        \item To maintain $X$'s balance *before* the insert, if $X.left$ was $h-3$, $X.right$ must have been $h-3$.
+        \item Thus, the yellow box's height *before* insertion was $h-3$, and it was unchanged by the insertion.
+    \end{enumerate}
+\end{itemize}

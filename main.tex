@@ -1,0 +1,126 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   TWO-COLUMN EXAM CHEATSHEET TEMPLATE
+%
+%   This template is designed to maximize data density on an A4 page.
+%   It uses small margins, no page numbers, and compact list/paragraph
+%   settings.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --- DOCUMENT CLASS ---
+% 10pt: Small base font size
+% a4paper: Standard A4 paper
+% twocolumn: The core requirement
+\documentclass[10pt, a4paper, twocolumn]{article}
+
+
+% --- PACKAGE CONFIGURATION ---\
+
+% 1. GEOMETRY: Set very small margins
+% This is the most important setting for "max data".
+% All margins (top, bottom, left, right) are set to 1cm.
+\usepackage[a4paper, top=1cm, bottom=1cm, left=1cm, right=1cm]{geometry}
+\usepackage{lipsum}
+
+% 2. FONT & LANGUAGE (Universal Preamble Protocol)
+% We use fontspec to load modern Noto fonts, ensuring compilation.
+% \usepackage{fontspec}
+\usepackage[english, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{english}
+% Use Noto Sans. It's very clear and compact (sans-serif).
+% \babelfont{rm}{Noto Sans}
+% \babelfont{sf}{Noto Sans}
+% \babelfont{tt}{Noto Sans Mono}
+
+% 3. TYPOGRAPHY & SPACING
+% microtype improves justification and text spacing, making it look
+% tighter and more professional.
+\usepackage{microtype}
+\usepackage{enumitem} % For list customization
+\usepackage{amsmath} % For math
+\usepackage{amssymb} % For math symbols
+\usepackage{algorithmic} % For algorithms
+\usepackage{algorithm} % For algorithm floats
+\usepackage{booktabs} % For better tables
+\usepackage{graphicx} % For images (if any)
+
+% 4. THEOREM-LIKE ENVIRONMENTS (optional, but good for definitions)
+\usepackage{amsthm}
+\newtheoremstyle{crisp}
+  {} % Space above
+  {} % Space below
+  {\itshape} % Body font
+  {} % Indent amount
+  {\bfseries} % Theorem head font
+  {.} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {} % Theorem head spec
+\theoremstyle{crisp}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{question}[theorem]{Question}
+
+% 5. HYPERLINKS (Must be last)
+% Useful if you want clickable links in your PDF (e.g., to web resources)
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    pdftitle={Exam Cheatsheet},
+    pdfauthor={Student},
+}
+
+
+% --- GLOBAL DOCUMENT SETTINGS ---
+
+% 1. Page Style
+% \pagestyle{empty} removes all headers and footers (no page numbers).
+\pagestyle{empty}
+
+% 2. List Spacing (CRITICAL FOR DENSITY)
+% This removes *all* vertical spacing from itemize and enumerate.
+\setlist{noitemsep, topsep=0pt, partopsep=0pt, parsep=0pt}
+
+% 3. Paragraph Spacing
+% \setlength{\parindent}{0pt} removes the first-line indent.
+% \setlength{\parskip}{0.5ex} adds a tiny vertical space between paragraphs.
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5ex}
+
+% 4. Column Spacing
+% Adjusts the blank space *between* the two columns.
+\setlength{\columnsep}{1.5em} % 1.5em is af good default
+
+
+% --- DOCUMENT START ---
+\begin{document}
+
+
+% --- MODULES START HERE ---
+
+\input{sections/module1_analysis.tex}
+
+\input{sections/module2_linear_ds.tex}
+
+\input{sections/module3_trees_heaps.tex}
+
+\input{sections/module4_heap_apps.tex}
+
+\input{sections/module5_hash_tables.tex}
+
+\input{sections/module6_search_trees.tex}
+
+\input{sections/module7_graphs.tex}
+
+\input{sections/module8a_problems_pre_bst.tex}
+\input{sections/module8b_problems_post_bst.tex}
+\input{sections/module9_exercise_solutions.tex}
+
+% --- END OF CONTENT ---
+
+\end{document}

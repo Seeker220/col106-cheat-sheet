@@ -1,0 +1,79 @@
+% --- MODULE 5: Hash Tables ---
+% --- LECTURES 21, 22, 23 ---
+
+\section*{Module 5: Hash Tables}
+
+\subsection*{Core Idea \& Operations}
+The main goal is to support `Insert`, `Delete`, and `Lookup` (Search) in average-case $\mathbf{O(1)}$ time.
+\begin{itemize}
+    \item \textbf{Setup:} We have a large \textbf{Universe $U$} of possible keys. We want to store a (much smaller) dynamic set $S \subseteq U$.
+    \item \textbf{Structure:} An array $A$ (buckets) of size $n$, where $n \approx |S|$.
+    \item \textbf{Hash Function:} A function $h: U \to \{0, \dots, n-1\}$ that maps keys to array indices (buckets).
+\end{itemize}
+
+\subsection*{Applications}
+\begin{description}
+    \item[De-duplication (Lec 21)] Check if a new item in a stream has been seen before.
+    \begin{itemize}
+        \item For new item $x$, `Lookup(x)`. If not found, `Insert(x)`.
+        \item $\mathbf{O(1)}$ per item.
+    \end{itemize}
+    \item[2-SUM Problem (Lec 21)] Given array $A$ (size $n$) and target $t$, find if $x, y \in A$ s.t. $x+y=t$.
+    \begin{itemize}
+        \item `Insert` all elements of $A$ into a hash table $H$. ($O(n)$)
+        \item For each $x \in A$, `Lookup(t-x)` in $H$. ($O(n) \times O(1) = O(n)$)
+        \item \textbf{Total Time: $\mathbf{O(n)}$}. (Beats $O(n \log n)$ sorting approach).
+    \end{itemize}
+\end{description}
+
+\subsection*{Collisions (Lec 21, 23)}
+Collisions are inevitable (by Pigeonhole Principle) when $|U| > n$. The \textbf{Birthday Paradox} shows they are far more likely than expected (e.g., $n=10k$, 400 objects $\to$ 99.9\% collision chance).
+
+\subsection*{Collision Resolution Strategies (Lec 22)}
+
+\subsubsection*{1. Chaining (Separate Chaining)}
+\begin{itemize}
+    \item Each bucket $A[i]$ holds a pointer to a \textbf{linked list} of all elements that hash to $i$.
+    \item \textbf{Load Factor:} $\alpha = |S| / n$. Can be $> 1$.
+    \item \textbf{Operations:}
+    \begin{itemize}
+        \item `Insert(x)`: Insert $x$ at the head of list $A[h(x)]$. \textbf{Time: $O(1)$}.
+        \item `Lookup(x)`: Search list $A[h(x)]$.
+        \item `Delete(x)`: Search and delete from list $A[h(x)]$.
+    \end{itemize}
+    \item \textbf{Performance:} All ops depend on list length. If $h$ is good ("spreads data"), average list length is $\alpha$.
+    \item \textbf{Expected Time:} $\mathbf{O(1+\alpha)}$. If we maintain $n = \Theta(|S|)$, then $\alpha=O(1)$, and all ops are \textbf{$O(1)$}.
+\end{itemize}
+
+\subsubsection*{2. Open Addressing}
+\begin{itemize}
+    \item At most one object per bucket. Requires $n \ge |S|$ (so $\alpha \le 1$).
+    \item \textbf{Probing:} If $h(x)$ is full, probe for the next empty slot using a probe sequence.
+    \item \textbf{Linear Probing:} Try $h(x), (h(x)+1)\%n, (h(x)+2)\%n, \dots$
+    \item \textbf{Double Hashing:} Try $h_1(x), (h_1(x)+h_2(x))\%n, (h_1(x)+2h_2(x))\%n, \dots$
+    \item \textbf{Delete:} Tricky. Cannot just empty the slot. Must mark it as "DELETED".
+    \item \textbf{Performance:} Heavily degrades as $\alpha \to 1$. Needs $\alpha \ll 1$.
+\end{itemize}
+
+\subsection*{Good Hash Functions (Lec 23)}
+\begin{description}
+    \item[Goal] ``Spreads out the data'' evenly, mapping similar keys to different buckets.
+    
+    \item[Bad Functions] 
+    \texttt{h(x) = first 3 digits} (bad for phone numbers) or 
+    \texttt{h(x) = x mod n} where $n = 2^k$ (bad for data with common low-bit patterns).
+    
+    \item[Method] \texttt{h(x) = (hash\_code(x)) mod n}
+    \begin{itemize}
+        \item \textbf{Hash Code:} Map key $x$ (e.g., string) to a large integer.
+        \item \textbf{Compression:} Map the integer to $\{0, \dots, n-1\}$.
+    \end{itemize}
+    
+    \item[Choosing $n$ (bucket count)] 
+    $n$ should be a \textbf{prime number} that is not too close to a power of 2.  
+    This helps break up patterns in the input data.
+    
+    \item[Universal Hashing] 
+    To defeat a ``pathological dataset’’ (adversary), we use a \textit{family} of hash functions $\mathcal{H}$ and pick one $h \in \mathcal{H}$ at random.  
+    This guarantees good average performance, no matter the input data.
+\end{description}

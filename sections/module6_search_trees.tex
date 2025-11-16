@@ -1,0 +1,175 @@
+% --- MODULE 6: Binary Search Trees, AVL Trees, B-Trees ---
+% --- LECTURES 24-32 & CLRS 12, 18 & GTM 10.4 ---
+
+\section*{Module 6: Search Trees (BST, AVL, B-Trees)}
+
+\subsection*{Binary Search Tree (BST) (Lec 24, 25, CLRS 12)}
+A binary tree that maintains a sorted order.
+
+\subsubsection*{The BST Invariant}
+For any node $x$ in the tree:
+\begin{itemize}
+    \item All keys in $x$'s \textbf{left} subtree are $\le \text{key}(x)$.
+    \item All keys in $x$'s \textbf{right} subtree are $\ge \text{key}(x)$.
+\end{itemize}
+\textbf{Property (CLRS Thm 12.1):} An \texttt{InorderTraversal} of a BST outputs its elements in sorted order.
+\textit{Proof (by induction):} A subtree of 1 node is sorted. Assume Inorder($T_L$) and Inorder($T_R$) are sorted. Then Inorder($T$) = [Inorder($T_L$)] + [root] + [Inorder($T_R$)]. By the BST invariant, all items in $T_L \le$ root $\le$ all items in $T_R$. Thus, the full list is sorted.
+
+\subsubsection*{Operations (all $O(h)$, where $h$ is tree height)}
+\begin{description}
+    \item[\texttt{Search(k)}] Start at root. If $k < \text{key}(x)$, go left. If $k > \text{key}(x)$, go right. If $x=$ NULL, $k$ is not found.
+    \item[\texttt{Minimum(x)}] Start at $x$, follow \texttt{left} child pointers until NULL.
+    \item[\texttt{Maximum(x)}] Start at $x$, follow \texttt{right} child pointers until NULL.
+    \item[\texttt{Insert(z)}] \texttt{Search} for key $k$. The (NULL) leaf position where the search ends is where $z$ is inserted.
+\end{description}
+\textbf{Theorem 12.4 (CLRS):} The expected height of a \textbf{randomly built} BST on $n$ distinct keys is $\mathbf{O(\log n)}$. This means that on average, all operations are efficient.
+
+\subsubsection*{Successor(x) (Lec 25, CLRS 12.2)}
+Finds the node with the smallest key that is \textit{larger} than $\text{key}(x)$.
+\begin{itemize}
+    \item \textbf{Case 1: $x$ has a right subtree.}
+    The successor is the \texttt{Minimum()} node in $x$'s right subtree.
+    \item \textbf{Case 2: $x$ has NO right subtree.}
+    Go up the tree using \texttt{parent} pointers. The successor is the \textbf{first ancestor} $y$ such that $x$ is in the \textbf{left subtree} of $y$. (This is the first "right turn" you take on the path up). If you reach the root and no such $y$ exists, $x$ was the maximum.
+\end{itemize}
+
+\subsubsection*{Delete(z) (Lec 25, CLRS 12.3)}
+This is the most complex operation, formalized by CLRS with a helper `TRANSPLANT(u, v)` which replaces subtree $u$ with subtree $v$.
+\begin{itemize}
+    \item \textbf{Case 1: $z$ has no left child.}
+    Replace $z$ with its right child (which could be NULL).
+    \item \textbf{Case 2: $z$ has no right child.}
+    Replace $z$ with its left child.
+    \item \textbf{Case 3: $z$ has two children.}
+    \begin{enumerate}
+        \item Find $z$'s \textbf{successor}, $y = \texttt{Minimum}(z.\text{right})$.
+        \item $y$ is guaranteed to be in $z$'s right subtree and will have \textbf{no left child}.
+        \item \textbf{If $y$ is $z$'s direct child:} Replace $z$ with $y$, and $y$ adopts $z$'s left child.
+        \item \textbf{If $y$ is not $z$'s direct child:}
+        \begin{itemize}
+            \item Replace $y$ with its own right child (a Case 1 op).
+            \item $y$ adopts $z$'s right child.
+            \item Replace $z$ with $y$, and $y$ adopts $z$'s left child.
+        \end{itemize}
+    \end{enumerate}
+\end{itemize}
+\textbf{Problem:} All operations are $O(h)$. If keys are inserted in sorted order, the tree becomes a linked list with $h=O(n)$. Operations degrade to $O(n)$.
+
+\subsection*{Augmented BSTs (Lec 26)}
+\textbf{Idea:} Store extra data in each node to answer new types of queries.
+\begin{itemize}
+    \item \textbf{Rule:} The augmented data must be computable from the node's key and its children's augmented data in $O(1)$ time.
+    \item \textbf{Example: Subtree Size.} Store $size(x)$ at each node.
+    \item \textbf{Update Rule:} $size(x) = size(\text{left}(x)) + size(\text{right}(x)) + 1$.
+    \item \textbf{New Operation: \texttt{Rank(t)}} (How many nodes are $\le t$?) in $O(h)$.
+\end{itemize}
+
+\subsection*{AVL Trees (Self-Balancing BST) (Lec 27, 28, 29)}
+\textbf{Goal:} Guarantee $h = O(\log n)$ by keeping the tree balanced.
+\begin{description}
+    \item[AVL Property (Height-Balance)] For \textit{every} node $x$, the heights of its children can differ by at most 1:
+    $|\text{height}(\text{left}(x)) - \text{height}(\text{right}(x))| \le 1$.
+    \item[Complexity] All BST operations are guaranteed $\mathbf{O(\log n)}$.
+\end{description}
+
+\subsubsection*{Insert \& Delete in AVL Trees}
+\begin{enumerate}
+    \item Perform the standard BST `Insert` or `Delete`.
+    \item Walk back up from the modified node to the root, updating the `height` of each ancestor.
+    \item Find the \textbf{first (lowest) ancestor $z$} that violates the AVL property.
+    \item Perform the correct \textbf{Rotation} operation at $z$ to restore balance.
+    \item \textit{Proof of Correctness (Insert):} `Insert` requires at most 1 (single or double) rotation. The rotation at $z$ is designed such that the \textbf{new height} of the rotated subtree is the \textbf{same as the height of $z$ before the insertion}. This means no ancestors above $z$ become unbalanced.
+    \item \textit{Delete:} May require $O(\log n)$ rotations as you travel up, as a rotation at one node might unbalance its parent.
+\end{enumerate}
+\subsubsection*{Rotations (The Fix)}
+Let $z$ be the unbalanced node, $y$ be its taller child, and $x$ be $y$'s taller child.
+\begin{description}
+    \item[Case 1: Left-Left] (Single \textbf{Right Rotation} at $z$)
+    \item[Case 2: Right-Right] (Single \textbf{Left Rotation} at $z$)
+    \item[Case 3: Left-Right] (\textbf{Left Rotation} at $y$, then \textbf{Right Rotation} at $z$)
+    \item[Case 4: Right-Left] (\textbf{Right Rotation} at $y$, then \textbf{Left Rotation} at $z$)
+\end{description}
+
+\subsection*{(2,4) Trees (Lec 30, 31, GTM 10.4)}
+A balanced M-way tree ($M=4$) where nodes can hold multiple keys.
+\begin{description}
+    \item[Size Property] Every internal node has 2, 3, or 4 children (and 1, 2, or 3 keys).
+    \item[Depth Property] All leaves are at the \textbf{same level}.
+    \item[Height] $h = \mathbf{O(\log n)}$ (proven by $\min$ 2 children/node $\to$ $h \le \log_2 n$).
+\end{description}
+
+\subsubsection*{Insert in (2,4)-Tree}
+\begin{enumerate}
+    \item \texttt{Search} to find the correct leaf node to insert $k$.
+    \item \textbf{If leaf has < 3 keys:} Add $k$ to the node. Done.
+    \item \textbf{If leaf is full (3 keys):} This is an \textbf{Overflow}.
+    \begin{enumerate}
+        \item Add $k$ to the full node (temporarily a "5-node" with 4 keys).
+        \item \textbf{Split} the node: Promote the middle key ($k_2$) up to the parent.
+        \item The remaining keys form two new nodes (with $k_1$ and $k_3, k_4$) which are attached to the parent.
+        \item If the parent is now full, \textbf{propagate the split upwards}.
+        \item If the root splits, the tree height grows by 1.
+    \end{enumerate}
+\end{enumerate}
+\textbf{Correctness:} The split operation is the only structural change, and it perfectly maintains the (2,4) properties (size and depth).
+
+\subsubsection*{Delete (Bottom-Up) (GTM 10.4.3)}
+\begin{enumerate}
+    \item \texttt{Search} for key $k$. If $k$ is not in a leaf, swap it with its successor (which must be in a leaf).
+    \item Remove $k$ from the leaf node.
+    \item \textbf{If leaf is now empty (0 keys):} This is an \textbf{Underflow}.
+    \begin{itemize}
+        \item \textbf{Case 1: Transfer.} If an adjacent sibling has $\ge 2$ keys, perform a "rotation". Move a key from the parent down to the empty node, and move a key from the sibling up to the parent.
+        \item \textbf{Case 2: Fusion.} If adjacent siblings are minimal (only 1 key), \textbf{merge} the empty node, its minimal sibling, and the key from the parent.
+        \item This fusion may cause the parent to underflow, so the process may \textbf{propagate upwards}. If the root underflows and is empty, it is deleted and the height shrinks by 1.
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection*{Delete (Top-Down / Pre-emptive)}
+\textbf{Idea:} Ensures we never delete from a minimal node (1-key node), avoiding upward propagation.
+\begin{enumerate}
+    \item \textbf{Handle Non-Leaf:} If $k$ is in an internal node, swap it with its inorder successor (which is in a leaf). The problem is now to delete the successor from a leaf.
+    \item \textbf{Pre-emptive Traversal:} Start at the root. As we traverse \textit{down} to the target leaf, at each node $x$ we visit:
+    \item \textbf{If $x$ is minimal (1 key):}
+    \begin{itemize}
+        \item \textbf{Case 1 (Transfer):} If an adjacent sibling has $\ge 2$ keys, perform a transfer (rotation) through the parent.
+        \item \textbf{Case 2 (Fusion):} If adjacent siblings are also minimal, perform a fusion with a sibling and the parent's separating key. (If the root is part of a fusion and becomes empty, the fused child becomes the new root.)
+    \end{itemize}
+    \item Now $x$ is guaranteed to have $\ge 2$ keys.
+    \item \textbf{Descend:} Move to the appropriate child (which may have changed after a fusion).
+    \item \textbf{Final Deletion:} When we reach the target leaf, it is \textit{guaranteed} to have $\ge 2$ keys. Remove $k$. No underflow occurs.
+\end{enumerate}
+
+
+\subsection*{B-Trees (Lec 32, CLRS 18)}
+The generalization of (2,4)-trees, ideal for disk-based memory.
+\begin{description}
+    \item[Properties (min-degree $t$)]
+    \begin{itemize}
+        \item Each node holds $k$ keys, where $t-1 \le k \le 2t-1$.
+        \item Each internal node with $k$ keys has $k+1$ children.
+        \item All leaves are at the same depth.
+        \item Root has at least 1 key (or 0 if tree is empty).
+    \end{itemize}
+    \item[Height] $h = O(\log_t n)$. This is excellent for disk, as $t$ can be large (e.g., 1000), making $h$ very small.
+\end{description}
+
+\subsubsection*{Search in B-Tree (CLRS 18.2)}
+$O(t)$ work per node, but $O(1)$ disk access. Total disk accesses: $\mathbf{O(\log_t n)}$.
+
+\subsubsection*{Insert in B-Tree (CLRS 18.3)}
+\textbf{Idea:} Avoids the "underflow-propagation" of (2,4) trees by being \textbf{pre-emptive}. We never insert into a full node.
+\begin{enumerate}
+    \item Start at root. As we traverse \textit{down} to find the leaf:
+    \item \textbf{If we encounter a full node $x$ ($2t-1$ keys):}
+    \item \textbf{Split $x$ first} using `B-TREE-SPLIT-CHILD`.
+    \item `B-TREE-SPLIT-CHILD(parent, i, x)`:
+    \begin{itemize}
+        \item Splits $x$ (the $i$-th child of parent) into two nodes, $x$ and $z$.
+        \item $x$ gets the first $t-1$ keys. $z$ gets the last $t-1$ keys.
+        \item The median key of $x$ (key $t$) moves up into the parent.
+    \end{itemize}
+    \item After splitting, we continue our search from the (now non-full) parent.
+    \item \textbf{Finally:} We reach the target leaf, which is \textit{guaranteed} not to be full. Insert key $k$.
+\end{enumerate}
+\textbf{Correctness:} This maintains all B-Tree properties. The only way height grows is if the root itself splits.

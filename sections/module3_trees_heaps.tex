@@ -1,0 +1,85 @@
+% --- MODULE 3: Trees, Heaps, & Priority Queues ---
+% --- LECTURES 12, 13, 14, 15, 16 & CLRS 6 ---
+
+\section*{Module 3: Trees, Heaps, \& Priority Queues}
+
+\subsection*{Tree ADT (Lec 12, 13)}
+A data structure that stores elements hierarchically.
+\begin{description}
+    \item[Root] The single top-most node.
+    \item[Leaf (External)] A node with no children.
+    \item[Internal Node] A node with one or more children.
+    \item[Depth of $v$] Length of the path from root to $v$. `depth(root) = 0`.
+    \item[Height of $v$] Length of the longest path from $v$ to a leaf. `height(leaf) = 0`.
+    \item[Height of Tree] Height of the root.
+\end{description}
+
+\subsection*{Binary Trees (Lec 13, 14)}
+A tree where each node has at most two children: a \textbf{left} child and a \textbf{right} child.
+\begin{itemize}
+    \item \textbf{Property:} A binary tree of height $h$ has $n$ nodes, where
+    $h+1 \le n \le 2^{h+1} - 1$.
+    \item This implies the height $h$ is at least $\Omega(\log n)$ and at most $O(n)$.
+\end{itemize}
+
+\subsection*{Tree Traversals (Lec 13, 14)}
+Systematic ways to visit all nodes in a tree.
+\begin{description}
+    \item[Preorder] (Root, Left, Right). Used to copy a tree.
+    \item[Inorder] (Left, Root, Right). Used in BSTs to get a sorted list.
+    \item[Postorder] (Left, Right, Root). Used to delete a tree or calculate directory sizes (Lec 13).
+    \item[Level-Order] (BFS). Visits nodes layer by layer using a \textbf{Queue}.
+\end{description}
+
+\subsection*{Binary Heap (Min-Heap) (Lec 14-16, CLRS 6)}
+A \textbf{Priority Queue} is often implemented using a Min-Heap.
+\begin{description}
+    \item[Structure Property] It is an \textbf{Almost Complete Binary Tree (ACBT)}. All levels are full except possibly the last, which is filled from left to right.
+    \item[Height] An ACBT with $n$ nodes has height $h = \lfloor \log n \rfloor$. (CLRS 6.1)
+    \item[Order Property (Min-Heap)] For every node $u$ (except the root), $\text{key}(\text{parent}(u)) \le \text{key}(u)$. The minimum element is always at the root.
+\end{description}
+
+\subsubsection*{Array-Based Representation (Lec 15)}
+An ACBT can be stored efficiently in an array. For a node at 0-based index $i$:
+\begin{itemize}
+    \item $\text{parent}(i) = \lfloor (i-1) / 2 \rfloor$
+    \item $\text{left}(i) = 2i + 1$
+    \item $\text{right}(i) = 2i + 2$
+\end{itemize}
+
+\subsubsection*{Heap Operations (Lec 15, 16, CLRS 6.2-6.3)}
+\begin{tabular}{l l l}
+    \textbf{Operation} & \textbf{Algorithm} & \textbf{Time} \\
+    \hline
+    \texttt{GetMin} & Read root & $O(1)$ \\
+    \texttt{Insert(k)} & Add to end, \textbf{Trickle-Up} & $O(\log n)$ \\
+    \texttt{DeleteMin} & Replace root with last, & $O(\log n)$ \\
+     & \textbf{Trickle-Down (Heapify)} & \\
+    \texttt{BuildHeap} & Call `Heapify` from & $\mathbf{O(n)}$ \\
+     & $n/2$ down to 0 & \\
+    \hline
+\end{tabular}
+
+\subsubsection*{Correctness of Heap Operations}
+\begin{itemize}
+    \item \textbf{Trickle-Up (Insert):} After inserting $k$, the only violation is if $k < \text{parent}(k)$. Swapping $k$ with its parent fixes this violation and moves the \textit{only} potential violation one level up. This repeats until $k \ge \text{parent}(k)$ or $k$ is the root.
+    
+    \item \textbf{Heapify(A, i) (Trickle-Down, CLRS 6.2):}
+    \begin{itemize}
+        \item \textbf{Assumption:} The subtrees at `left(i)` and `right(i)` are already valid heaps.
+        \item \textbf{Goal:} Make the tree at $i$ a valid heap.
+        \item \textbf{Logic:} Find the smallest of $\{i, \text{left}(i), \text{right}(i)\}$. If $i$ is not the smallest, swap $A[i]$ with $A[\text{smallest}]$. This fixes the violation at $i$.
+        \item \textbf{Proof:} The swap \textit{might} violate the heap property at the `smallest` child's new position. By recursively calling `Heapify(A, smallest)`, we correct this. This continues down the tree until a leaf is reached.
+        \item \textbf{Time:} $O(h) = O(\log n)$.
+    \end{itemize}
+    
+    \item \textbf{Build-Heap(A) (Lec 16, CLRS 6.3):}
+    \begin{itemize}
+        \item \textbf{Algorithm:} Call `Heapify(i)` for $i = \lfloor n/2 \rfloor$ down to $0$.
+        \item \textbf{Correctness (Loop Invariant):} "At the start of each iteration $i$, nodes $i+1, \dots, n-1$ are all roots of valid max-heaps."
+        \item \textbf{Init:} True. All nodes from $\lfloor n/2 \rfloor + 1$ to $n-1$ are leaves, which are trivial heaps.
+        \item \textbf{Maintenance:} `Heapify(i)` assumes children at $2i+1$ and $2i+2$ are heap roots. Since $2i+1 > i$, the invariant holds. `Heapify` makes $i$ a heap root, maintaining the invariant for the next (smaller) $i$.
+        \item \textbf{Termination:} When $i=0$, node 0 is made a heap root. Since $1 \dots n-1$ are already heap roots, the entire tree is a valid heap.
+        \item \textbf{Time Analysis:} $\mathbf{O(n)}$, not $O(n \log n)$. Most nodes are near the bottom and have small height. $\sum_{h=0}^{\log n} (n/2^{h+1}) \cdot O(h) = O(n)$.
+    \end{itemize}
+\end{itemize}

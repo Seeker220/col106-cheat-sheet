@@ -1,0 +1,164 @@
+% --- MODULE 7: Graph Algorithms (Expanded) ---
+% --- LECTURES 33-41 & CLRS 19-22 ---
+
+\section*{Module 7: Graph Algorithms}
+
+\subsection*{Graph Definitions (Lec 33)}
+\begin{description}
+    \item[Graph] $G = (V, E)$. $n = |V|, m = |E|$.
+    \item[Path] Sequence of vertices $(v_1, \dots, v_k)$ where $(v_i, v_{i+1}) \in E$.
+    \item[Cycle] A path that starts and ends at the same vertex. A graph with no cycles is \textbf{acyclic}. A \textbf{DAG} is a Directed Acyclic Graph.
+    \item[Handshake Lemma] $\sum_{v \in V} \text{deg}(v) = 2m$.
+\end{description}
+
+\subsection*{Graph Representations (Lec 34)}
+\begin{description}
+    \item[Adjacency List] Array of $n$ linked lists. $Adj[u]$ stores neighbors of $u$.
+    \begin{itemize}
+        \item \textbf{Memory:} $\mathbf{O(n+m)}$. \textbf{Standard for sparse graphs.}
+        \item \textbf{Check Edge $(u, v)$:} $O(\text{deg}(u))$.
+    \end{itemize}
+    \item[Adjacency Matrix] $n \times n$ matrix $A$ where $A[u][v] = 1$ if $(u, v) \in E$.
+    \begin{itemize}
+        \item \textbf{Memory:} $\mathbf{O(n^2)}$. \textbf{Standard for dense graphs.}
+        \item \textbf{Check Edge $(u, v)$:} $O(1)$.
+    \end{itemize}
+\end{description}
+
+\subsection*{Breadth-First Search (BFS) (Lec 35, CLRS 20.2)}
+\textbf{Idea:} Explores in "layers," 1 edge away, then 2, etc.
+\begin{itemize}
+    \item \textbf{Data Structure:} A \textbf{FIFO Queue}.
+    \item \textbf{Algorithm (from $s$):}
+    \begin{enumerate}
+        \item Mark $s$ as explored (GRAY), `dist(s)=0`, `enqueue(s)`.
+        \item While queue is not empty:
+        \item $u \gets \texttt{dequeue()}$.
+        \item For each neighbor $v$ of $u$:
+        \item If $v$ is unexplored (WHITE):
+        \item Mark $v$ GRAY, `dist(v) = dist(u) + 1`, `parent(v)=u`, `enqueue(v)`.
+        \item Mark $u$ as finished (BLACK).
+    \end{enumerate}
+    \item \textbf{Complexity:} $\mathbf{O(n+m)}$.
+\end{itemize}
+\textbf{Application: Shortest Paths (Unweighted).}
+\begin{itemize}
+    \item \textbf{Correctness (White Path Theorem):} BFS finds the shortest path $d(s,v)$ to all reachable $v$.
+    \item \textbf{Proof (by Induction on distance $k$):} (Lec 11/12)
+    \item \textbf{Hypothesis $Hyp(k)$:} BFS finds all nodes at distance $k$ (set $S_k$) after finding all nodes at distance $k-1$ (set $S_{k-1}$), and `dist(v)=k` $\forall v \in S_k$.
+    \item \textbf{Base $k=1$:} $S_0=\{s\}$ is enqueued. Its neighbors ($S_1$) are enqueued next, all with `dist = 0+1 = 1`. True.
+    \item \textbf{Step $Hyp(k) \to Hyp(k+1)$:} The queue ensures all nodes from $S_k$ are processed before any from $S_{k+1}$. When a $u \in S_k$ is dequeued, it discovers all its unvisited neighbors $v$. These $v$ must be in $S_{k+1}$ (if they were in $S_k$ or earlier, they'd be visited). BFS sets `dist(v) = dist(u) + 1 = k+1`. True.
+\end{itemize}
+
+\subsection*{Depth-First Search (DFS) (Lec 37, CLRS 20.3)}
+\textbf{Idea:} Explores as far as possible before backtracking.
+\begin{itemize}
+    \item \textbf{Data Structure:} A \textbf{LIFO Stack} (or recursion).
+    \item \textbf{Algorithm (recursive, from $s$):}
+    \begin{enumerate}
+        \item Mark $s$ as explored (GRAY) and set discovery time $d[s]$.
+        \item For each neighbor $v$ of $s$:
+        \item If $v$ is unexplored (WHITE):
+        \item `parent(v)=u`, call `DFS(v)`.
+        \item Mark $s$ as finished (BLACK) and set finish time $f[s]$.
+    \end{enumerate}
+    \item \textbf{Complexity:} $\mathbf{O(n+m)}$.
+\end{itemize}
+\textbf{Properties (CLRS 20.3):}
+\begin{itemize}
+    \item \textbf{Parenthesis Theorem:} The discovery/finish intervals are nested. For any two nodes $u, v$, either their intervals are disjoint, or one is contained within the other (iff one is a descendant of the other in the DFS tree).
+    \item \textbf{Edge Types:}
+    \begin{itemize}
+        \item \textbf{Tree Edge:} To a WHITE child.
+        \item \textbf{Back Edge:} To a GRAY ancestor (indicates a \textbf{CYCLE}).
+        \item \textbf{Forward/Cross Edge:} To a BLACK node.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{DFS Applications (Lec 38, 39, CLRS 20.4, 20.5)}
+\begin{description}
+    \item[Topological Sort (for DAGs)] A linear ordering where for all edges $(u, v)$, $u$ appears before $v$.
+    \begin{itemize}
+        \item \textbf{Algorithm:} Run DFS. As each vertex finishes, insert it onto the \textbf{front} of a linked list.
+        \item \textbf{Correctness:} For any edge $(u,v)$, DFS must finish $v$ before it finishes $u$ (if it saw $(u,v)$ and $v$ was GRAY, it's a cycle). Thus, $f[v] < f[u]$. Since the list is sorted by decreasing $f[]$, $u$ comes before $v$.
+    \end{itemize}
+    \item[Strongly Connected Components (SCCs)] (Kosaraju's)
+    \begin{enumerate}
+        \item Run DFS on $G$ to get finish times $f[u]$.
+        \item Compute $G^T$ (reverse all edges).
+        \item Run DFS on $G^T$, visiting vertices in order of \textbf{decreasing} $f[u]$.
+        \item Each tree in the 2nd DFS's forest is one SCC.
+    \end{enumerate}
+    \item \textbf{Correctness:} (Lec 39) The 1st DFS finds a "source" SCC (the one with the highest finish time $u$). The 2nd DFS (on $G^T$) starts at $u$ and can only explore $u$'s SCC, because all edges now point *into* that component from other SCCs, so the DFS gets "trapped" in the SCC.
+\end{description}
+
+\subsection*{Weighted Shortest Paths: Dijkstra (CLRS 22.3)}
+Finds shortest paths from $s$ in a \textbf{weighted} graph with \textbf{no negative edges}.
+\begin{itemize}
+    \item \textbf{Data Structure:} A \textbf{Min-Priority Queue} (Min-Heap).
+    \item \textbf{Algorithm (from $s$):}
+    \begin{enumerate}
+        \item Init: `dist[v] = $\infty$` for all $v$, `dist[s] = 0`.
+        \item Add all $v$ to Min-Heap $Q$ (keyed by `dist[v]`).
+        \item While $Q$ is not empty:
+        \item $u \gets Q.\texttt{DeleteMin()}$.
+        \item For each neighbor $v$ of $u$:
+        \item \textbf{Relaxation:} If `dist[u] + weight(u,v) < dist[v]`:
+        \item `dist[v] = dist[u] + weight(u,v)`
+        \item `parent(v) = u`
+        \item \texttt{DecreaseKey}$(Q, v)$
+    \end{enumerate}
+    \item \textbf{Complexity:} $O(n \log n + m \log n)$ (naive heap) or $\mathbf{O(n \log n + m)}$ (with Fibonacci heap or as $m \ge n$ $\mathbf{O(m \log n)}$ with binary heap).
+    \item \textbf{Correctness (Cut Property):} When Dijkstra adds $u$ to the set of "finished" nodes, `dist[u]` is the true shortest path. (Proof: Assume not. Let $u$ be the first node added with the wrong distance. Consider the true shortest path $s \dots x \to y \dots u$, where $x$ is finished and $y$ is not. Because $x$ is finished, $d(s,y) \le d(s,u)$. And since $d(s,y) < d(s,u)$ (non-neg edges), the algorithm would have chosen $y$ before $u$. Contradiction.)
+\end{itemize}
+\textbf{Special Case: 0-1 BFS} : If all weights are 0 or 1, use a \textbf{Deque}. When relaxing an edge: if weight is 0, `push\_front(v)`; if weight is 1, `push\_back(v)`. This maintains the "layers" and achieves $O(n+m)$.
+
+\subsection*{Minimum Spanning Tree (MST) (Lec 40, CLRS 21)}
+Finds a min-cost spanning tree in a connected, undirected, weighted graph.
+\begin{itemize}
+    \item \textbf{Generic Correctness (Cut Property):} For any cut (partition of $V$ into $S, V-S$), if $(u,v)$ is the \textbf{unique} minimum-weight edge crossing the cut, it \textbf{must} be in the MST. (Proof: Assume not. Adding $(u,v)$ to the MST $T^*$ creates a cycle. This cycle must have another edge $(x,y)$ crossing the cut. $c(x,y) > c(u,v)$. Swapping $(u,v)$ for $(x,y)$ gives a cheaper tree. Contradiction.)
+\end{itemize}
+
+\subsubsection*{Kruskal's Algorithm (Lec 40, 41, CLRS 21.2)}
+\textbf{Idea:} A greedy algorithm that builds the MST by adding the cheapest edges that don't form a cycle.
+\begin{enumerate}
+    \item \textbf{Sort} all $m$ edges by weight.
+    \item Init: $T = \emptyset$. Init a \textbf{DSU} with $n$ sets (one per vertex).
+    \item For each edge $(u, v)$ in sorted order:
+    \item If $\texttt{Find}(u) \neq \texttt{Find}(v)$:
+    \item $T = T \cup \{(u, v)\}$
+    \item $\texttt{Union}(u, v)$
+\end{enumerate}
+\textbf{Time:} $\mathbf{O(m \log m)}$ or $\mathbf{O(m \log n)}$ (dominated by edge sort).
+
+\subsubsection*{Prim's Algorithm (CLRS 21.2)}
+\textbf{Idea:} A greedy algorithm that "grows" the MST from a single vertex $s$.
+\begin{enumerate}
+    \item \textbf{Data Structure:} A \textbf{Min-Priority Queue} (Min-Heap) $Q$.
+    \item Init: For all $v$, `key[v] = $\infty$`, `parent[v] = NULL`. Set `key[s] = 0`.
+    \item Add all $v$ to $Q$ (keyed by `key[v]`).
+    \item While $Q$ is not empty:
+    \item $u \gets Q.\texttt{DeleteMin()}$.
+    \item For each neighbor $v$ of $u$:
+    \item If $v \in Q$ and $\text{weight}(u,v) < \text{key}[v]$:
+    \item `parent[v] = u`, `key[v] = weight(u,v)`
+    \item \texttt{DecreaseKey}$(Q, v)$
+\end{enumerate}
+\textbf{Time:} $\mathbf{O(m \log n)}$ (with a binary heap).
+
+\subsection*{Disjoint Set Union (DSU) (Lec 41, CLRS 19)}
+Data structure for maintaining disjoint sets. Used by Kruskal's.
+\begin{description}
+    \item[\texttt{MakeSet(x)}] Create a new set $\{x\}$.
+    \item[\texttt{Find(x)}] Return the representative (root) of $x$'s set.
+    \item[\texttt{Union(x, y)}] Merge the sets containing $x$ and $y$.
+\end{description}
+\textbf{Optimizations (Required for good performance):}
+\begin{enumerate}
+    \item \textbf{Union-by-Size (or Rank):} In `Union(x, y)`, make the root of the \textbf{smaller} tree point to the root of the \textbf{larger} tree.
+    \begin{itemize}
+        \item \textbf{Proof:} This guarantees tree height is $O(\log n)$. A node's depth only increases when its set is merged into a larger one, at least doubling the set size. This can only happen $O(\log n)$ times.
+    \end{itemize}
+    \item \textbf{Path Compression:} During `Find(x)`, make every node on the path from $x$ to the root point directly to the root.
+\end{enumerate}
+\textbf{Complexity:} With both optimizations, a sequence of $m$ operations (on $n$ sets) takes $\mathbf{O(m \cdot \alpha(n))}$ time, where $\alpha(n)$ is the inverse Ackermann function, which is practically $O(1)$ (grows *extremely* slowly, e.g., $\alpha(n) \le 4$ for any practical $n$).

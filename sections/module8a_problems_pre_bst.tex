@@ -1,0 +1,286 @@
+% --- MODULE 8 (PART 1): Problems (Arrays, Lists, Stacks, Heaps, Hashes, DP) ---
+% --- This file is now UPDATED with problems from GFG PDFs ---
+
+\section*{Module 8 (Part 1): Problems (Pre-BST \& DP)}
+
+\subsection*{Module 1/2: Arrays, Search, Stacks, \& Lists}
+
+\subsubsection*{Problem: 2-Sum (Lec 21, Blind 75)}
+\begin{itemize}
+\item \textbf{Problem:} Given an array of integers nums and a target, return indices of two numbers such that they add up to target. (Also called "Check for Pair with Given Sum" in GFG).
+\item \textbf{Solution Idea:} Use a Hash Map (Module 5). Iterate through the array once. For each element x, check if target - x is already in the map. If yes, return the indices. If no, add x and its index to the map.
+\item \textbf{Complexity:} $O(n)$ time, $O(n)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: 3Sum (Blind 75)}
+\begin{itemize}
+\item \textbf{Problem:} Find all unique triplets in nums that sum to zero.
+\item \textbf{Solution Idea:} Sort the array first ($O(n \log n)$). Then, iterate through the array with a main pointer i. For each i, use two new pointers j = i+1 and k = n-1. Move j and k toward each other, checking the sum. If sum < 0, move j right. If sum > 0, move k left.
+\item \textbf{Key:} Must skip duplicate elements for i, j, and k to ensure unique triplets.
+\item \textbf{Complexity:} $O(n^2)$ time, $O(\log n)$ or $O(n)$ space for sorting.
+\end{itemize}
+
+\subsubsection*{Problem: Search in Rotated Sorted Array (Blind 75)}
+\begin{itemize}
+\item \textbf{Problem:} Given a sorted array rotated at some pivot, search for a target in $O(\log n)$ time.
+\item \textbf{Solution Idea:} Use a modified Binary Search (Module 1). In each step, check if the mid element is in the "left" sorted portion or the "right" sorted portion.
+\item \begin{enumerate}
+\item Find mid. If nums[mid] == target, return.
+\item \textbf{If left half is sorted} (nums[low] <= nums[mid]):
+\begin{itemize}
+\item If target is in this half (nums[low] <= target < nums[mid]), search left (high = mid - 1).
+\item Otherwise, search right (low = mid + 1).
+\end{itemize}
+\item \textbf{If right half is sorted} (nums[mid] < nums[high]):
+\begin{itemize}
+\item If target is in this half (nums[mid] < target <= nums[high]), search right (low = mid + 1).
+\item Otherwise, search left (high = mid - 1).
+\end{itemize}
+\end{enumerate}
+\item \textbf{Complexity:} $O(\log n)$ time, $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Find Majority Element (from GFG Arrays.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Find the element that appears more than $n/2$ times.
+\item \textbf{Solution Idea (Boyer-Moore):} Maintain a candidate and a count. Iterate the array. If count == 0, set candidate = nums[i]. If nums[i] == candidate, count++. Else, count--.
+\item \textbf{Key:} A second pass is needed to verify if the candidate truly appears > $n/2$ times, (though not if one is guaranteed to exist).
+\item \textbf{Complexity:} $O(n)$ time, $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: K-th Smallest of Two Sorted Arrays (Hard)}
+\begin{itemize}
+\item \textbf{Problem:} Given two sorted arrays $A$ (size $n$) and $B$ (size $m$), find the $k$-th smallest element in their union.
+\item \textbf{Solution Idea:} Use Binary Search on the \textit{smaller} array (assume $A$, $n \le m$) to find a partition $i$.
+\item We binary search for $i$ in the range $[\max(0, k-m), \min(k, n)]$.
+\item Let $j = k - i$. We have found the correct partition when:
+$A[i-1] \le B[j]$ AND $B[j-1] \le A[i]$.
+\item (Handle edge cases $i=0, i=n, j=0, j=m$ with $-\infty$ and $+\infty$).
+\item When found, the answer is $\max(A[i-1], B[j-1])$.
+\item \textbf{Complexity:} $\mathbf{O(\log(\min(n, m)))}$ time, $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Container With Most Water (Blind 75)}
+\begin{itemize}
+\item \textbf{Problem:} Find two lines in height array which, with the x-axis, form a container holding the most water.
+\item \textbf{Solution Idea:} Use a "two-pointer" approach. Start with l=0 and r=n-1. Calculate the area. To maximize area, you must move the pointer corresponding to the \textbf{shorter} line.
+\item \textbf{Complexity:} $O(n)$ time, $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Trapping Rain Water (Blind 75, GFG Arrays.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Given an elevation map, compute how much water it can trap.
+\item \textbf{Solution Idea (Optimal):} Use two pointers l=0 and r=n-1, and two variables max\_l and max\_r. If max\_l < max\_r, process the left pointer l (water is max\_l - height[l]) and move l right. Otherwise, process and move r left.
+\item \textbf{Complexity:} $O(n)$ time, $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Product of Array Except Self (Blind 75, GFG Arrays.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Given nums, return answer where answer[i] is the product of all elements of nums except nums[i]. Must be $O(n)$ and no division.
+\item \textbf{Solution Idea:} Use two passes. (1) Left-to-right pass to store prefix products in answer. (2) Right-to-left pass, multiplying by a running suffix product.
+\item \textbf{Complexity:} $O(n)$ time, $O(1)$ space (if output array doesn't count).
+\end{itemize}
+
+\subsubsection*{Problem: Count Inversions (from GFG Divide-And-Conquer.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Find the number of pairs $(i, j)$ such that $i < j$ and $A[i] > A[j]$.
+\item \textbf{Solution Idea:} Use a modified Merge Sort. During the merge step, when an element from the \textbf{right} subarray (R[j]) is moved before an element from the \textbf{left} subarray (L[i]), it means R[j] is smaller than all remaining elements in the left subarray.
+\item if L[i] <= R[j]: move L[i].
+\item else: move R[j], inversions += (mid - i + 1).
+\item \textbf{Complexity:} $O(n \log n)$ time (same as Merge Sort).
+\end{itemize}
+
+\subsubsection*{Problem: Set Matrix Zeroes (LeetCode)}
+\begin{itemize}
+\item \textbf{Problem:} If an element in an $M \times N$ matrix is 0, set its entire row and column to 0. Do this in-place.
+\item \textbf{Solution Idea:} Use the first row and first column of the matrix itself as storage to mark rows/cols for zeroing. Use two boolean flags to handle whether the first row/col themselves originally contained a zero.
+\item \textbf{Complexity:} $O(M \cdot N)$ time, $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Valid Parentheses (Lec 7, Blind 75, GFG Stack.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Check if a string of '(', ')', '[', ']', '{', '}' is valid.
+\item \textbf{Solution Idea:} This is the canonical Stack application. Iterate the string. Push opening brackets. When a closing bracket is found, pop and check for a match. If stack is empty on pop, or no match, or stack not empty at end, return false.
+\item \textbf{Complexity:} $O(n)$ time, $O(n)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Next Greater Element (from GFG Stack.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} For each element in an array, find the first element to its right that is greater than it.
+\item \textbf{Solution Idea:} Use a Stack. Iterate the array from \textbf{right to left}.
+\item For each element x:
+\item while stack is not empty and stack.top() <= x: pop() from stack.
+\item if stack is empty: result[i] = -1.
+\item else: result[i] = stack.top().
+\item push(x) onto the stack.
+\item \textbf{Complexity:} $O(n)$ time (each element is pushed/popped once), $O(n)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Largest Rectangular Area in Histogram (from GFG Stack.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Find the largest rectangle of all-1s in a binary matrix (or largest area in a histogram).
+\item \textbf{Solution Idea:} (For Histogram) Use a stack to store indices. We want to find the nearest smaller bar on the \textit{left} and \textit{right} for each bar i.
+\item Iterate i from 0 to $n$: while stack not empty and hist[stack.top()] >= hist[i]:
+\item tp = stack.pop(). The hist[tp] bar's right bound is i, left bound is stack.top().
+\item area = hist[tp] * (i - stack.top() - 1). Update max\_area.
+\item push(i) onto stack.
+\item \textbf{Complexity:} $O(n)$ time, $O(n)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Evaluate Reverse Polish Notation (LeetCode)}
+\begin{itemize}
+\item \textbf{Problem:} Evaluate an arithmetic expression in Reverse Polish Notation (RPN).
+\item \textbf{Solution Idea:} Classic Stack problem. Iterate tokens. If number, push. If operator, pop two numbers, perform operation, push result.
+\item \textbf{Complexity:} $O(n)$ time, $O(n)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Linked List Cycle (Lec 37, Blind 75, GFG Linked-List.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Determine if a linked list has a cycle.
+\item \textbf{Solution Idea:} Floyd's Tortoise and Hare. slow moves 1 step, fast moves 2. If they meet, a cycle exists.
+\item \textbf{Complexity:} $O(n)$ time, $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Linked List Cycle II (LeetCode)}
+\begin{itemize}
+\item \textbf{Problem:} If a cycle exists, return the node where it begins.
+\item \textbf{Solution Idea:} Find the meeting point meet. Reset a new pointer start to head. Move start and meet one step at a time. Their new meeting point is the cycle's start.
+\item \textbf{Complexity:} $O(n)$ time, $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Reverse a Linked List (from GFG Linked-List.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Reverse a singly linked list.
+\item \textbf{Solution Idea (Iterative):} Use three pointers: prev = NULL, curr = head, next = NULL.
+\item while (curr != NULL): next = curr.next, curr.next = prev, prev = curr, curr = next.
+\item Return prev (which is the new head).
+\item \textbf{Complexity:} $O(n)$ time, $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Merge Two Sorted Lists (from GFG Linked-List.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Merge two sorted linked lists into one sorted list.
+\item \textbf{Solution Idea:} Create a dummy head node. Maintain a tail pointer. Compare l1.val and l2.val. Append the smaller node to tail, and advance that list's pointer.
+\item \textbf{Complexity:} $O(n+m)$ time, $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Intersection Point of Two Lists (from GFG Linked-List.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Find the node at which two linked lists intersect.
+\item \textbf{Solution Idea 1 (Hash):} Add all nodes of l1 to a HashSet. Iterate l2 and return the first node found in the set. $O(n+m)$ time, $O(n)$ space.
+\item \textbf{Solution Idea 2 (Pointers):} Get lengths len1, len2. Move the pointer of the longer list by abs(len1-len2) steps. Now, move both pointers one step at a time. The node where they meet is the intersection. $O(n+m)$ time, $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Remove Nth Node From End of List (Blind 75)}
+\begin{itemize}
+\item \textbf{Problem:} Remove the $n$-th node from the end of a list in one pass.
+\item \textbf{Solution Idea:} Use two pointers. Move fast $n$ steps ahead. Then move fast and slow together until fast.next is NULL. slow is now at the node before the target.
+\item \textbf{Complexity:} $O(L)$ time (one pass), $O(1)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Implement Queue using Stacks (from GFG Queue.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Implement Enqueue and Dequeue using two stacks.
+\item \textbf{Solution Idea (Amortized $O(1)$ Dequeue):} Use s1 (input) and s2 (output).
+\item \textbf{Enqueue(x):} s1.push(x). $O(1)$.
+\item \textbf{Dequeue():} if s2 is empty: while s1 is not empty: s2.push(s1.pop()).
+\item return s2.pop(). $O(1)$ amortized.
+\item \textbf{Complexity:} Amortized $O(1)$ for both operations.
+\end{itemize}
+
+\subsection*{Module 3/4: Heaps \& Priority Queues}
+
+\subsubsection*{Problem: Find Median from Data Stream (Blind 75, GFG Heaps.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Design a class to support addNum(int) and findMedian() from a stream.
+\item \textbf{Solution Idea:} Use two heaps: a \textbf{Max-Heap} left\_half (smaller half) and a \textbf{Min-Heap} right\_half (larger half). Rebalance after each add so sizes differ by at most 1.
+\item \textbf{Complexity:} addNum is $O(\log n)$, findMedian is $O(1)$.
+\end{itemize}
+
+\subsubsection*{Problem: Merge k Sorted Lists (Blind 75, GFG Heaps.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Merge $k$ sorted linked lists into one.
+\item \textbf{Solution Idea:} Use a \textbf{Min-Priority Queue} (Min-Heap) of size $k$. Insert the head of all $k$ lists. While heap is not empty: DeleteMin node $u$, add $u$ to result, Insert $u.next$ into heap.
+\item \textbf{Complexity:} $O(N \log k)$ time, where $N$ is total elements. $O(k)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Top K Frequent Elements (Blind 75)}
+\begin{itemize}
+\item \textbf{Problem:} Given nums and $k$, return the $k$ most frequent elements.
+\item \textbf{Solution Idea (Heap):} (1) Build a Hash Map of (number, frequency) ($O(n)$). (2) Create a \textbf{Min-Heap} of size $k$. (3) Iterate the map, pushing (freq, num). If heap.size() > k, pop().
+\item \textbf{Complexity:} $O(n \log k)$ time, $O(n+k)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Connect n Ropes with Minimum Cost (from GFG Heaps.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Given $n$ ropes of different lengths, connect them into one rope with minimum cost (cost of connecting $a$ and $b$ is $a+b$).
+\item \textbf{Solution Idea:} This is Huffman's idea (Lec 19). Use a \textbf{Min-Priority Queue}.
+\item Insert all $n$ rope lengths into the heap.
+\item while heap.size() > 1: a = heap.DeleteMin(), b = heap.DeleteMin(). new\_rope = a + b. total\_cost += new\_rope. heap.Insert(new\_rope).
+\item \textbf{Complexity:} $O(n \log n)$ time.
+\end{itemize}
+
+\subsection*{Module 5: Hash Tables}
+
+\subsubsection*{Problem: Longest Substring Without Repeating Characters (Blind 75)}
+\begin{itemize}
+\item \textbf{Problem:} Find the length of the longest substring without repeating characters.
+\item \textbf{Solution Idea:} Use the "Sliding Window" technique with a Hash Set (or Hash Map char -> index). Maintain window $[l, r]$. Move r. If char[r] is a duplicate (in set or map), move l to the right past the first occurrence.
+\item \textbf{Complexity:} $O(n)$ time, $O(k)$ space (where $k$ is size of charset).
+\end{itemize}
+
+\subsubsection*{Problem: LRU Cache (Hard, Blind 75, GFG Hashing.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Design a cache with get and put in $O(1)$ time. It must evict the "Least Recently Used" item when full.
+\item \textbf{Solution Idea:} Combine a \textbf{Hash Map} (map<key, Node*>) for $O(1)$ lookup and a \textbf{Doubly Linked List (DLL)} to maintain recency order.
+\item \textbf{get(key):} Look up node in map. Move node to head of DLL.
+\item \textbf{put(key, val):} If key exists, update value, move node to head. If new: create node, add to head. If full: evict tail of DLL, remove tail.key from map.
+\item \textbf{Complexity:} $O(1)$ for both get and put.
+\end{itemize}
+
+\subsubsection*{Problem: Find Duplicates in O(n) time (from GFG Hashing.pdf)}
+\begin{itemize}
+\item \textbf{Problem:} Given an array of $n$ numbers (from 1 to $n$), find all duplicates.
+\item \textbf{Solution Idea (In-place Hash):} Iterate the array. For each element x, go to index idx = abs(x) - 1. If nums[idx] is negative, x is a duplicate. Otherwise, mark nums[idx] as negative (nums[idx] = -nums[idx]).
+\item \textbf{Complexity:} $O(n)$ time, $O(1)$ space.
+\end{itemize}
+
+\subsection*{Module X: Dynamic Programming (New Section)}
+
+\subsubsection*{Problem: Coin Change (Blind 75)}
+\begin{itemize}
+\item \textbf{Problem:} Find the fewest number of coins to make a given amount, given coin denominations.
+\item \textbf{Solution Idea (Bottom-Up DP):} Create dp[amount+1] initialized to $\infty$. Set dp[0] = 0.
+\item for i from 1 to amount:
+\item for c in coins:
+\item if i - c >= 0:
+\item dp[i] = min(dp[i], 1 + dp[i-c])
+\item The answer is dp[amount].
+\item \textbf{Complexity:} $O(A \cdot C)$ time, $O(A)$ space, where $A$=amount, $C$=num coins.
+\end{itemize}
+
+\subsubsection*{Problem: Longest Increasing Subsequence (LIS) (Blind 75)}
+\begin{itemize}
+\item \textbf{Problem:} Find the length of the longest strictly increasing subsequence.
+\item \textbf{Solution Idea 1 (DP):} dp[i] = length of LIS \textit{ending at index i}. $O(n^2)$.
+\item \textbf{Solution Idea 2 (Patience Sorting):} Maintain an array tails storing the smallest ending element for all LIS of a given length. For each x in nums, find the first tails[i] >= x and replace it (using binary search). If no such element, append x.
+\item \textbf{Complexity 2:} $O(n \log n)$ time, $O(n)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Longest Common Subsequence (LCS) (Blind 75)}
+\begin{itemize}
+\item \textbf{Problem:} Find the length of the LCS between text1 and text2.
+\item \textbf{Solution Idea (DP):} dp[i][j] = LCS of text1[0..i] and text2[0..j].
+\item if text1[i] == text2[j]: dp[i][j] = 1 + dp[i-1][j-1]
+\item else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+\item \textbf{Complexity:} $O(n \cdot m)$ time, $O(n \cdot m)$ space.
+\end{itemize}
+
+\subsubsection*{Problem: Word Break (Blind 75)}
+\begin{itemize}
+\item \textbf{Problem:} Can s be segmented into a sequence of dictionary words?
+\item \textbf{Solution Idea (DP):} dp[i] = boolean, true if s[0..i-1] can be broken.
+\item dp[0] = true. for i from 1 to n: for j from 0 to i-1:
+\item if dp[j] and s[j..i-1] in wordDict: dp[i] = true; break;
+\item \textbf{Complexity:} $O(n^2)$ time (due to substring check), $O(n)$ space.
+\end{itemize}

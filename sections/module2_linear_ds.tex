@@ -1,0 +1,87 @@
+% --- MODULE 2: Linear Data Structures ---
+% --- LECTURES 4, 5, 6, 7, 8, 10 & CLRS 10 ---
+
+\section*{Module 2: Linear Data Structures (Lists, Stacks, Queues)}
+
+\subsection*{Arrays vs. Linked Lists (Lec 4, 5, 6)}
+A fundamental trade-off in data structures.
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Operation} & \textbf{Array} & \textbf{Linked List} \\ \hline
+Read (by index) & $O(1)$ & $O(n)$ \\
+Search & $O(n)$ & $O(n)$ \\
+Insert (at front) & $O(n)$ & $O(1)$ \\
+Insert (at end) & $O(1)$* & $O(1)$** \\
+Delete (at front) & $O(n)$ & $O(1)$ \\
+Delete (at end) & $O(1)$ & $O(n)$*** \\
+\hline
+\end{tabular}
+\end{center}
+\begin{footnotesize}
+*Amortized $O(1)$ with dynamic array (Lec 9).
+**Requires a \texttt{tail} pointer.
+***Requires traversal to find predecessor, or a Doubly Linked List.
+\end{footnotesize}
+\begin{itemize}
+    \item \textbf{Sentinel Nodes (CLRS 10.2):} To simplify code, use a special dummy node `L.nil` for the `head` and to mark the `next` of the tail. This removes edge cases for empty lists or single-node lists.
+\end{itemize}
+
+\subsection*{Stack ADT (LIFO - Last-In, First-Out) (Lec 6, 7)}
+\begin{description}
+    \item[Push(e)] Insert element at the top. \textbf{$O(1)$*}.
+    \item[Pop()] Remove and return element from top. \textbf{$O(1)$}.
+    \item[Top()] Return top element without removing. \textbf{$O(1)$}.
+\end{description}
+\begin{footnotesize}
+*Amortized $O(1)$ using a dynamic array (Lec 9).
+\end{footnotesize}
+
+\subsubsection*{Application: Balanced Parentheses (Lec 7)}
+Algorithm to check if a string of brackets is balanced.
+\begin{itemize}
+    \item Create an empty stack.
+    \item Iterate through the string:
+    \begin{itemize}
+        \item If char is an \textbf{opening} bracket ('(', '[', '\{'), \textbf{push} it onto the stack.
+        \item If char is a \textbf{closing} bracket (')', ']', '\}'):
+        \begin{itemize}
+            \item If stack is empty $\to$ \textbf{return false}.
+            \item \textbf{Pop} the top element.
+            \item If popped bracket does not match the closing bracket $\to$ \textbf{return false}.
+        \end{itemize}
+    \end{itemize}
+    \item After the loop, \textbf{return true} if the stack is empty, else \textbf{false}.
+\end{itemize}
+\textbf{Complexity:} $O(n)$ time, $O(n)$ space.
+
+\subsection*{Queue ADT (FIFO - First-In, First-Out) (Lec 8)}
+\begin{description}
+    \item[Enqueue(e)] Insert element at the back. \textbf{$O(1)$*}.
+    \item[Dequeue()] Remove and return element from front. \textbf{$O(1)$**}.
+    \item[Front()] Return front element without removing. \textbf{$O(1)$}.
+\end{description}
+\begin{footnotesize}
+*Amortized $O(1)$ using a dynamic/doubling array.
+**Requires a \textbf{circular array} implementation to avoid an $O(n)$ shift.
+\end{footnotesize}
+
+\subsubsection*{Application: Maze Solving / BFS (Lec 10)}
+\begin{itemize}
+    \item Queues are the core data structure for \textbf{Breadth-First Search (BFS)}.
+    \item BFS explores "layer by layer", which is used to find the \textbf{shortest path} in unweighted graphs (like a maze).
+    \item \textbf{Proof of Correctness:} This is a non-trivial proof by induction. See the proof in \textbf{Module 7} (Graphs).
+\end{itemize}
+
+\subsection*{General Tree Representation (CLRS 10.3)}
+How to store a tree where nodes have an \textit{arbitrary} number of children?
+\begin{itemize}
+    \item \textbf{Bad Idea:} Array of pointers at each node (wastes space).
+    \item \textbf{Good Idea: Left-Child, Right-Sibling Representation.}
+    \item Each node $x$ has only two pointers:
+    \begin{enumerate}
+        \item $x.\text{left\_child}$: points to its first child.
+        \item $x.\text{right\_sibling}$: points to its next sibling.
+    \end{enumerate}
+    \item This creates a binary tree, where all "left" pointers go down one level, and all "right" pointers stay on the same level.
+\end{itemize}
