@@ -1,9 +1,9 @@
 % --- MODULE 5: Hash Tables ---
 % --- LECTURES 21, 22, 23 ---
 
-\section*{Module 5: Hash Tables}
+\section{Module 5: Hash Tables}
 
-\subsection*{Core Idea \& Operations}
+\subsection{Core Idea \& Operations}
 The main goal is to support `Insert`, `Delete`, and `Lookup` (Search) in average-case $\mathbf{O(1)}$ time.
 \begin{itemize}
     \item \textbf{Setup:} We have a large \textbf{Universe $U$} of possible keys. We want to store a (much smaller) dynamic set $S \subseteq U$.
@@ -11,7 +11,7 @@ The main goal is to support `Insert`, `Delete`, and `Lookup` (Search) in average
     \item \textbf{Hash Function:} A function $h: U \to \{0, \dots, n-1\}$ that maps keys to array indices (buckets).
 \end{itemize}
 
-\subsection*{Applications}
+\subsection{Applications}
 \begin{description}
     \item[De-duplication (Lec 21)] Check if a new item in a stream has been seen before.
     \begin{itemize}
@@ -26,12 +26,12 @@ The main goal is to support `Insert`, `Delete`, and `Lookup` (Search) in average
     \end{itemize}
 \end{description}
 
-\subsection*{Collisions (Lec 21, 23)}
+\subsection{Collisions (Lec 21, 23)}
 Collisions are inevitable (by Pigeonhole Principle) when $|U| > n$. The \textbf{Birthday Paradox} shows they are far more likely than expected (e.g., $n=10k$, 400 objects $\to$ 99.9\% collision chance).
 
-\subsection*{Collision Resolution Strategies (Lec 22)}
+\subsection{Collision Resolution Strategies (Lec 22)}
 
-\subsubsection*{1. Chaining (Separate Chaining)}
+\subsubsection{1. Chaining (Separate Chaining)}
 \begin{itemize}
     \item Each bucket $A[i]$ holds a pointer to a \textbf{linked list} of all elements that hash to $i$.
     \item \textbf{Load Factor:} $\alpha = |S| / n$. Can be $> 1$.
@@ -45,7 +45,7 @@ Collisions are inevitable (by Pigeonhole Principle) when $|U| > n$. The \textbf{
     \item \textbf{Expected Time:} $\mathbf{O(1+\alpha)}$. If we maintain $n = \Theta(|S|)$, then $\alpha=O(1)$, and all ops are \textbf{$O(1)$}.
 \end{itemize}
 
-\subsubsection*{2. Open Addressing}
+\subsubsection{2. Open Addressing}
 \begin{itemize}
     \item At most one object per bucket. Requires $n \ge |S|$ (so $\alpha \le 1$).
     \item \textbf{Probing:} If $h(x)$ is full, probe for the next empty slot using a probe sequence.
@@ -55,7 +55,7 @@ Collisions are inevitable (by Pigeonhole Principle) when $|U| > n$. The \textbf{
     \item \textbf{Performance:} Heavily degrades as $\alpha \to 1$. Needs $\alpha \ll 1$.
 \end{itemize}
 
-\subsection*{Good Hash Functions (Lec 23)}
+\subsection{Good Hash Functions (Lec 23)}
 \begin{description}
     \item[Goal] ``Spreads out the data'' evenly, mapping similar keys to different buckets.
     

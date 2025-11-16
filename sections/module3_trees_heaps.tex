@@ -1,9 +1,9 @@
 % --- MODULE 3: Trees, Heaps, & Priority Queues ---
 % --- LECTURES 12, 13, 14, 15, 16 & CLRS 6 ---
 
-\section*{Module 3: Trees, Heaps, \& Priority Queues}
+\section{Module 3: Trees, Heaps, \& Priority Queues}
 
-\subsection*{Tree ADT (Lec 12, 13)}
+\subsection{Tree ADT (Lec 12, 13)}
 A data structure that stores elements hierarchically.
 \begin{description}
     \item[Root] The single top-most node.
@@ -14,7 +14,7 @@ A data structure that stores elements hierarchically.
     \item[Height of Tree] Height of the root.
 \end{description}
 
-\subsection*{Binary Trees (Lec 13, 14)}
+\subsection{Binary Trees (Lec 13, 14)}
 A tree where each node has at most two children: a \textbf{left} child and a \textbf{right} child.
 \begin{itemize}
     \item \textbf{Property:} A binary tree of height $h$ has $n$ nodes, where
@@ -22,7 +22,7 @@ A tree where each node has at most two children: a \textbf{left} child and a \te
     \item This implies the height $h$ is at least $\Omega(\log n)$ and at most $O(n)$.
 \end{itemize}
 
-\subsection*{Tree Traversals (Lec 13, 14)}
+\subsection{Tree Traversals (Lec 13, 14)}
 Systematic ways to visit all nodes in a tree.
 \begin{description}
     \item[Preorder] (Root, Left, Right). Used to copy a tree.
@@ -31,7 +31,7 @@ Systematic ways to visit all nodes in a tree.
     \item[Level-Order] (BFS). Visits nodes layer by layer using a \textbf{Queue}.
 \end{description}
 
-\subsection*{Binary Heap (Min-Heap) (Lec 14-16, CLRS 6)}
+\subsection{Binary Heap (Min-Heap) (Lec 14-16, CLRS 6)}
 A \textbf{Priority Queue} is often implemented using a Min-Heap.
 \begin{description}
     \item[Structure Property] It is an \textbf{Almost Complete Binary Tree (ACBT)}. All levels are full except possibly the last, which is filled from left to right.
@@ -39,7 +39,7 @@ A \textbf{Priority Queue} is often implemented using a Min-Heap.
     \item[Order Property (Min-Heap)] For every node $u$ (except the root), $\text{key}(\text{parent}(u)) \le \text{key}(u)$. The minimum element is always at the root.
 \end{description}
 
-\subsubsection*{Array-Based Representation (Lec 15)}
+\subsubsection{Array-Based Representation (Lec 15)}
 An ACBT can be stored efficiently in an array. For a node at 0-based index $i$:
 \begin{itemize}
     \item $\text{parent}(i) = \lfloor (i-1) / 2 \rfloor$
@@ -47,7 +47,7 @@ An ACBT can be stored efficiently in an array. For a node at 0-based index $i$:
     \item $\text{right}(i) = 2i + 2$
 \end{itemize}
 
-\subsubsection*{Heap Operations (Lec 15, 16, CLRS 6.2-6.3)}
+\subsubsection{Heap Operations (Lec 15, 16, CLRS 6.2-6.3)}
 \begin{tabular}{l l l}
     \textbf{Operation} & \textbf{Algorithm} & \textbf{Time} \\
     \hline
@@ -60,7 +60,7 @@ An ACBT can be stored efficiently in an array. For a node at 0-based index $i$:
     \hline
 \end{tabular}
 
-\subsubsection*{Correctness of Heap Operations}
+\subsubsection{Correctness of Heap Operations}
 \begin{itemize}
     \item \textbf{Trickle-Up (Insert):} After inserting $k$, the only violation is if $k < \text{parent}(k)$. Swapping $k$ with its parent fixes this violation and moves the \textit{only} potential violation one level up. This repeats until $k \ge \text{parent}(k)$ or $k$ is the root.
     

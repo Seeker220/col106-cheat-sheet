@@ -1,11 +1,11 @@
 % --- MODULE 8 (PART 2): Problems (BST, Tries, Graphs) ---
 % --- This file is now UPDATED with problems from GFG PDFs ---
 
-\section*{Module 8 (Part 2): Problems (Post-BST)}
+\section{Module 8 (Part 2): Problems (Post-BST)}
 
-\subsection*{Module 6: Trees, BSTs, Tries}
+\subsection{Module 6: Trees, BSTs, Tries}
 
-\subsubsection*{Problem: Validate Binary Search Tree (Blind 75)}
+\subsubsection{Problem: Validate Binary Search Tree (Blind 75)}
 \begin{itemize}
 \item \textbf{Problem:} Determine if a binary tree is a valid BST.
 \item \textbf{Solution Idea:} Use a recursive DFS. Pass down the valid range (min\_val, max\_val) allowed for the current node. The invariant must hold for all ancestors.
@@ -15,7 +15,7 @@
 \item \textbf{Complexity:} $O(n)$ time, $O(h)$ space.
 \end{itemize}
 
-\subsubsection*{Problem: BST Deletion (from GFG Binary-Search-Tree.pdf)}
+\subsubsection{Problem: BST Deletion (from GFG Binary-Search-Tree.pdf)}
 \begin{itemize}
 \item \textbf{Problem:} Delete a node z from a BST (Lec 25).
 \item \textbf{Solution Idea:}
@@ -28,7 +28,7 @@
 \item \textbf{Complexity:} $O(h)$ time.
 \end{itemize}
 
-\subsubsection*{Problem: Kth Smallest Element in a BST (Blind 75)}
+\subsubsection{Problem: Kth Smallest Element in a BST (Blind 75)}
 \begin{itemize}
 \item \textbf{Problem:} Find the $k$-th smallest element in a BST.
 \item \textbf{Solution Idea 1 (Inorder):} Perform an inorder traversal. Stop at the $k$-th visited node. $O(n)$ time.
@@ -36,7 +36,7 @@
 \item \textbf{Complexity 2:} $O(h)$ time.
 \end{itemize}
 
-\subsubsection*{Problem: Lowest Common Ancestor of a BST (from GFG)}
+\subsubsection{Problem: Lowest Common Ancestor of a BST (from GFG)}
 \begin{itemize}
 \item \textbf{Problem:} Find the LCA of two nodes p and q in a BST.
 \item \textbf{Solution Idea:} This is much simpler than a general BT. Start from the root.
@@ -46,7 +46,7 @@
 \item \textbf{Complexity:} $O(h)$ time, $O(1)$ space (iterative).
 \end{itemize}
 
-\subsubsection*{Problem: Convert Sorted Array to Balanced BST (from GFG)}
+\subsubsection{Problem: Convert Sorted Array to Balanced BST (from GFG)}
 \begin{itemize}
 \item \textbf{Problem:} Given a sorted array, create a height-balanced BST.
 \item \textbf{Solution Idea:} This is a Divide and Conquer approach.
@@ -58,7 +58,7 @@
 \item \textbf{Complexity:} $O(n)$ time (visits each node once).
 \end{itemize}
 
-\subsubsection*{Problem: Lowest Common Ancestor of a Binary Tree (Blind 75)}
+\subsubsection{Problem: Lowest Common Ancestor of a Binary Tree (Blind 75)}
 \begin{itemize}
 \item \textbf{Problem:} Find the LCA of two nodes $p$ and $q$ in a general binary tree.
 \item \textbf{Solution Idea:} Use a recursive DFS find(node, p, q).
@@ -68,7 +68,7 @@
 \item \textbf{Complexity:} $O(n)$ time, $O(h)$ space.
 \end{itemize}
 
-\subsubsection*{Problem: Construct Tree from Preorder and Inorder (Blind 75)}
+\subsubsection{Problem: Construct Tree from Preorder and Inorder (Blind 75)}
 \begin{itemize}
 \item \textbf{Problem:} Given preorder and inorder traversal arrays, construct the binary tree.
 \item \textbf{Solution Idea:} (1) First element of preorder is the root. (2) Find root in inorder to split it into left/right subarrays. (3) Use lengths of these subarrays to split preorder. (4) Recurse.
@@ -76,14 +76,14 @@
 \item \textbf{Complexity:} $O(n)$ time, $O(n)$ space.
 \end{itemize}
 
-\subsubsection*{Problem: Binary Tree Maximum Path Sum (Hard, Blind 75)}
+\subsubsection{Problem: Binary Tree Maximum Path Sum (Hard, Blind 75)}
 \begin{itemize}
 \item \textbf{Problem:} Find the maximum sum of any path in a binary tree.
 \item \textbf{Solution Idea:} Use a recursive DFS max\_gain(node). It returns the max path sum \textit{extendable upwards}. It also updates a global max\_sum with the max path sum \textit{contained at this node} (node.key + left\_gain + right\_gain).
 \item \textbf{Complexity:} $O(n)$ time, $O(h)$ space.
 \end{itemize}
 
-\subsubsection*{Problem: AVL Tree Insertion (from GFG Advanced-Data-Structure.pdf)}
+\subsubsection{Problem: AVL Tree Insertion (from GFG Advanced-Data-Structure.pdf)}
 \begin{itemize}
 \item \textbf{Problem:} Insert a node into an AVL tree and rebalance (Lec 27-29).
 \item \textbf{Solution Idea:} (1) Perform standard BST insert. (2) Walk back up from the new node to the root. (3) At each ancestor z, update its height. (4) Find the \textbf{first} ancestor z that violates the AVL property ($|h\_L - h\_R| > 1$). (5) Perform the correct \textbf{Rotation} (LL, RR, LR, RL) at z.
@@ -91,7 +91,7 @@
 \item \textbf{Complexity:} $O(\log n)$ time.
 \end{itemize}
 
-\subsubsection*{Problem: B-Tree Insertion (from GFG Advanced-Data-Structure.pdf)}
+\subsubsection{Problem: B-Tree Insertion (from GFG Advanced-Data-Structure.pdf)}
 \begin{itemize}
 \item \textbf{Problem:} Insert a key into a B-Tree (Lec 32).
 \item \textbf{Solution Idea (Pre-emptive Split):} We \textit{never} insert into a full node.
@@ -103,30 +103,30 @@
 \item \textbf{Complexity:} $O(\log\_t n)$ disk accesses.
 \end{itemize}
 
-\subsubsection*{Problem: Implement Trie (Prefix Tree) (Blind 75)}
+\subsubsection{Problem: Implement Trie (Prefix Tree) (Blind 75)}
 \begin{itemize}
 \item \textbf{Problem:} Implement a Trie with insert, search, and startsWith.
 \item \textbf{Solution Idea:} Use a TrieNode class with children[26] and isEndOfWord.
 \item \textbf{Complexity:} All ops are $O(L)$ time, where $L$ is length of the word.
 \end{itemize}
 
-\subsubsection*{Problem: Auto-complete feature using Trie (from GFG Advanced-Data-Structure.pdf)}
+\subsubsection{Problem: Auto-complete feature using Trie (from GFG Advanced-Data-Structure.pdf)}
 \begin{itemize}
 \item \textbf{Problem:} Given a query string s, return all words in the dictionary that have s as a prefix.
 \item \textbf{Solution Idea:} (1) search the Trie for the node corresponding to the prefix s. (2) If this node p exists, run a DFS from p to find all words in the subtree rooted at p.
 \item \textbf{Complexity:} $O(L + K \cdot M)$ where $L$=length of prefix, $K$=number of suggestions, $M$=avg word length.
 \end{itemize}
 
-\subsection*{Module 7: Graph Algorithms}
+\subsection{Module 7: Graph Algorithms}
 
-\subsubsection*{Problem: Number of Islands (Blind 75)}
+\subsubsection{Problem: Number of Islands (Blind 75)}
 \begin{itemize}
 \item \textbf{Problem:} Given a 2D grid of '1's (land) and '0's (water), count the islands.
 \item \textbf{Solution Idea:} Iterate the grid. If grid[r][c] == '1' and unvisited: increment island\_count, and start a \textbf{BFS or DFS} to visit and mark all connected '1's.
 \item \textbf{Complexity:} $O(N \cdot M)$ time.
 \end{itemize}
 
-\subsubsection*{Problem: Topological Sort (from GFG Graphs.pdf)}
+\subsubsection{Problem: Topological Sort (from GFG Graphs.pdf)}
 \begin{itemize}
 \item \textbf{Problem:} Find a linear ordering of vertices in a DAG such that for every edge $(u, v)$, $u$ comes before $v$ (Lec 38).
 \item \textbf{Solution Idea (DFS):} (1) Run DFS on the graph. (2) As each vertex \textbf{finishes} (is marked BLACK), insert it onto the \textbf{front} of a linked list. (3) This list is the topological sort.
@@ -134,7 +134,7 @@
 \item \textbf{Complexity:} $O(n+m)$ time.
 \end{itemize}
 
-\subsubsection*{Problem: Course Schedule (Lec 38, Blind 75)}
+\subsubsection{Problem: Course Schedule (Lec 38, Blind 75)}
 \begin{itemize}
 \item \textbf{Problem:} Can you finish all courses given prerequisites?
 \item \textbf{Solution Idea:} This is \textbf{Cycle Detection in a Directed Graph}.
@@ -142,7 +142,7 @@
 \item \textbf{Complexity:} $O(n+m)$ time.
 \end{itemize}
 
-\subsubsection*{Problem: Detect Cycle in Undirected Graph (from GFG Graphs.pdf)}
+\subsubsection{Problem: Detect Cycle in Undirected Graph (from GFG Graphs.pdf)}
 \begin{itemize}
 \item \textbf{Problem:} Check if an undirected graph has a cycle.
 \item \textbf{Solution Idea 1 (DFS):} Run DFS. Keep track of each node's parent. If you find an edge to an already-visited node v that is \textbf{not} your parent, you have found a back edge/cycle.
@@ -150,7 +150,7 @@
 \item \textbf{Complexity:} $O(n+m)$ for DFS. $O(m \cdot \alpha(n))$ for DSU.
 \end{itemize}
 
-\subsubsection*{Problem: Snake and Ladder (from GFG Graphs.pdf)}
+\subsubsection{Problem: Snake and Ladder (from GFG Graphs.pdf)}
 \begin{itemize}
 \item \textbf{Problem:} Find the minimum number of dice throws to win a Snake and Ladder game.
 \item \textbf{Solution Idea:} This is a \textbf{Shortest Path in an Unweighted Graph} problem.
@@ -161,14 +161,14 @@
 \item \textbf{Complexity:} $O(n)$ time (where $n=100$).
 \end{itemize}
 
-\subsubsection*{Problem: Word Search (Backtracking/DFS)}
+\subsubsection{Problem: Word Search (Backtracking/DFS)}
 \begin{itemize}
 \item \textbf{Problem:} Find if a word exists in a 2D grid. Cannot reuse a cell.
 \item \textbf{Solution Idea:} \textbf{DFS with backtracking}. Start DFS from any cell matching word[0]. Mark cell as visited, explore 4 neighbors, then un-mark cell.
 \item \textbf{Complexity:} $O(N \cdot M \cdot 3^L)$ where $L$ is word length.
 \end{itemize}
 
-\subsubsection*{Problem: Kruskal's Algorithm for MST (from GFG Graphs.pdf)}
+\subsubsection{Problem: Kruskal's Algorithm for MST (from GFG Graphs.pdf)}
 \begin{itemize}
 \item \textbf{Problem:} Find a Minimum Spanning Tree (Lec 41).
 \item \textbf{Solution Idea:} (1) \textbf{Sort} all $m$ edges by weight ($O(m \log m)$). (2) Initialize a \textbf{DSU} with $n$ sets. (3) Iterate sorted edges $(u, v)$: if Find(u) != Find(v): add $(u, v)$ to MST and Union(u, v).

@@ -1,12 +1,12 @@
 % --- MODULE 4: Heap Applications & Greedy Algorithms ---
 % --- LECTURES 17, 18, 19, 20 & CLRS 6.4, 15.3 ---
 
-\section*{Module 4: Heap Apps \& Greedy Algorithms}
+\section{Module 4: Heap Apps \& Greedy Algorithms}
 
-\subsection*{Heap Sort (Lec 17, CLRS 6.4)}
+\subsection{Heap Sort (Lec 17, CLRS 6.4)}
 An in-place sorting algorithm with $O(n \log n)$ worst-case time.
 
-\subsubsection*{Algorithm (for ascending order)}
+\subsubsection{Algorithm (for ascending order)}
 \begin{enumerate}
     \item \textbf{Build Max-Heap:} Convert the input array $A$ of $n$ elements into a max-heap. ($O(n)$)
     \item \textbf{Iterate $i = (n-1)$ down to $1$:}
@@ -18,7 +18,7 @@ An in-place sorting algorithm with $O(n \log n)$ worst-case time.
 \end{enumerate}
 \textbf{Total Time:} $O(n) \text{ (Build)} + (n-1) \times O(\log n) \text{ (Heapify)} = \mathbf{O(n \log n)}$.
 
-\subsubsection*{Proof of Correctness}
+\subsubsection{Proof of Correctness}
 \textbf{Loop Invariant:} At the start of each iteration $i$:
 \begin{enumerate}
     \item The subarray $A[i+1 \dots n-1]$ contains the $(n-i)$ largest elements of $A$, \textit{in sorted order}.
@@ -31,7 +31,7 @@ An in-place sorting algorithm with $O(n \log n)$ worst-case time.
 \end{itemize}
 
 
-\subsection*{Greedy Algorithm: Huffman Coding (Lec 17-20, CLRS 15.3)}
+\subsection{Greedy Algorithm: Huffman Coding (Lec 17-20, CLRS 15.3)}
 A \textbf{greedy algorithm} that generates an optimal prefix-free binary code for data compression.
 \begin{description}
     \item[Problem] Given symbols with frequencies $p_i$, find a binary code for each symbol to minimize the average encoding length: $\min \sum p_i \cdot (\text{depth of symbol } i)$.
@@ -39,7 +39,7 @@ A \textbf{greedy algorithm} that generates an optimal prefix-free binary code fo
     \item[Tree Representation] Prefix-free codes correspond to \textbf{full binary trees} where symbols are \textbf{only at the leaves}. The code for a symbol is the path from the root (0=left, 1=right).
 \end{description}
 
-\subsubsection*{Huffman's Algorithm (Greedy Strategy)}
+\subsubsection{Huffman's Algorithm (Greedy Strategy)}
 Builds the optimal tree from the bottom up.
 \begin{enumerate}
     \item \textbf{Initialize:} Create a \textbf{min-priority queue} (Min-Heap) of $n$ "trees", where each tree is a single leaf node for a symbol, and its priority is its frequency.
@@ -54,7 +54,7 @@ Builds the optimal tree from the bottom up.
 \end{enumerate}
 \textbf{Running Time:} $O(n \log n)$, because it involves $O(n)$ `Insert` and $O(n)$ `DeleteMin` operations on a priority queue of size $O(n)$.
 
-\subsubsection*{Proof of Correctness (CLRS 15.3)}
+\subsubsection{Proof of Correctness (CLRS 15.3)}
 Uses induction on $n=|\Sigma|$. Proves two key properties:
 \begin{description}
     \item[Greedy Choice Property] In *some* optimal tree, the two lowest-frequency symbols ($x, y$) are sibling leaves at the maximum depth.
