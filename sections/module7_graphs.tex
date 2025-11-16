@@ -1,9 +1,9 @@
 % --- MODULE 7: Graph Algorithms (Expanded) ---
 % --- LECTURES 33-41 & CLRS 19-22 ---
 
-\section*{Module 7: Graph Algorithms}
+\section{Module 7: Graph Algorithms}
 
-\subsection*{Graph Definitions (Lec 33)}
+\subsection{Graph Definitions (Lec 33)}
 \begin{description}
     \item[Graph] $G = (V, E)$. $n = |V|, m = |E|$.
     \item[Path] Sequence of vertices $(v_1, \dots, v_k)$ where $(v_i, v_{i+1}) \in E$.
@@ -11,7 +11,7 @@
     \item[Handshake Lemma] $\sum_{v \in V} \text{deg}(v) = 2m$.
 \end{description}
 
-\subsection*{Graph Representations (Lec 34)}
+\subsection{Graph Representations (Lec 34)}
 \begin{description}
     \item[Adjacency List] Array of $n$ linked lists. $Adj[u]$ stores neighbors of $u$.
     \begin{itemize}
@@ -25,7 +25,7 @@
     \end{itemize}
 \end{description}
 
-\subsection*{Breadth-First Search (BFS) (Lec 35, CLRS 20.2)}
+\subsection{Breadth-First Search (BFS) (Lec 35, CLRS 20.2)}
 \textbf{Idea:} Explores in "layers," 1 edge away, then 2, etc.
 \begin{itemize}
     \item \textbf{Data Structure:} A \textbf{FIFO Queue}.
@@ -50,7 +50,7 @@
     \item \textbf{Step $Hyp(k) \to Hyp(k+1)$:} The queue ensures all nodes from $S_k$ are processed before any from $S_{k+1}$. When a $u \in S_k$ is dequeued, it discovers all its unvisited neighbors $v$. These $v$ must be in $S_{k+1}$ (if they were in $S_k$ or earlier, they'd be visited). BFS sets `dist(v) = dist(u) + 1 = k+1`. True.
 \end{itemize}
 
-\subsection*{Depth-First Search (DFS) (Lec 37, CLRS 20.3)}
+\subsection{Depth-First Search (DFS) (Lec 37, CLRS 20.3)}
 \textbf{Idea:} Explores as far as possible before backtracking.
 \begin{itemize}
     \item \textbf{Data Structure:} A \textbf{LIFO Stack} (or recursion).
@@ -75,7 +75,7 @@
     \end{itemize}
 \end{itemize}
 
-\subsection*{DFS Applications (Lec 38, 39, CLRS 20.4, 20.5)}
+\subsection{DFS Applications (Lec 38, 39, CLRS 20.4, 20.5)}
 \begin{description}
     \item[Topological Sort (for DAGs)] A linear ordering where for all edges $(u, v)$, $u$ appears before $v$.
     \begin{itemize}
@@ -92,7 +92,7 @@
     \item \textbf{Correctness:} (Lec 39) The 1st DFS finds a "source" SCC (the one with the highest finish time $u$). The 2nd DFS (on $G^T$) starts at $u$ and can only explore $u$'s SCC, because all edges now point *into* that component from other SCCs, so the DFS gets "trapped" in the SCC.
 \end{description}
 
-\subsection*{Weighted Shortest Paths: Dijkstra (CLRS 22.3)}
+\subsection{Weighted Shortest Paths: Dijkstra (CLRS 22.3)}
 Finds shortest paths from $s$ in a \textbf{weighted} graph with \textbf{no negative edges}.
 \begin{itemize}
     \item \textbf{Data Structure:} A \textbf{Min-Priority Queue} (Min-Heap).
@@ -113,13 +113,13 @@ Finds shortest paths from $s$ in a \textbf{weighted} graph with \textbf{no negat
 \end{itemize}
 \textbf{Special Case: 0-1 BFS} : If all weights are 0 or 1, use a \textbf{Deque}. When relaxing an edge: if weight is 0, `push\_front(v)`; if weight is 1, `push\_back(v)`. This maintains the "layers" and achieves $O(n+m)$.
 
-\subsection*{Minimum Spanning Tree (MST) (Lec 40, CLRS 21)}
+\subsection{Minimum Spanning Tree (MST) (Lec 40, CLRS 21)}
 Finds a min-cost spanning tree in a connected, undirected, weighted graph.
 \begin{itemize}
     \item \textbf{Generic Correctness (Cut Property):} For any cut (partition of $V$ into $S, V-S$), if $(u,v)$ is the \textbf{unique} minimum-weight edge crossing the cut, it \textbf{must} be in the MST. (Proof: Assume not. Adding $(u,v)$ to the MST $T^*$ creates a cycle. This cycle must have another edge $(x,y)$ crossing the cut. $c(x,y) > c(u,v)$. Swapping $(u,v)$ for $(x,y)$ gives a cheaper tree. Contradiction.)
 \end{itemize}
 
-\subsubsection*{Kruskal's Algorithm (Lec 40, 41, CLRS 21.2)}
+\subsubsection{Kruskal's Algorithm (Lec 40, 41, CLRS 21.2)}
 \textbf{Idea:} A greedy algorithm that builds the MST by adding the cheapest edges that don't form a cycle.
 \begin{enumerate}
     \item \textbf{Sort} all $m$ edges by weight.
@@ -131,7 +131,7 @@ Finds a min-cost spanning tree in a connected, undirected, weighted graph.
 \end{enumerate}
 \textbf{Time:} $\mathbf{O(m \log m)}$ or $\mathbf{O(m \log n)}$ (dominated by edge sort).
 
-\subsubsection*{Prim's Algorithm (CLRS 21.2)}
+\subsubsection{Prim's Algorithm (CLRS 21.2)}
 \textbf{Idea:} A greedy algorithm that "grows" the MST from a single vertex $s$.
 \begin{enumerate}
     \item \textbf{Data Structure:} A \textbf{Min-Priority Queue} (Min-Heap) $Q$.
@@ -146,7 +146,7 @@ Finds a min-cost spanning tree in a connected, undirected, weighted graph.
 \end{enumerate}
 \textbf{Time:} $\mathbf{O(m \log n)}$ (with a binary heap).
 
-\subsection*{Disjoint Set Union (DSU) (Lec 41, CLRS 19)}
+\subsection{Disjoint Set Union (DSU) (Lec 41, CLRS 19)}
 Data structure for maintaining disjoint sets. Used by Kruskal's.
 \begin{description}
     \item[\texttt{MakeSet(x)}] Create a new set $\{x\}$.

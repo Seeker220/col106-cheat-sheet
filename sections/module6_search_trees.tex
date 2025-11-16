@@ -1,12 +1,12 @@
 % --- MODULE 6: Binary Search Trees, AVL Trees, B-Trees ---
 % --- LECTURES 24-32 & CLRS 12, 18 & GTM 10.4 ---
 
-\section*{Module 6: Search Trees (BST, AVL, B-Trees)}
+\section{Module 6: Search Trees (BST, AVL, B-Trees)}
 
-\subsection*{Binary Search Tree (BST) (Lec 24, 25, CLRS 12)}
+\subsection{Binary Search Tree (BST) (Lec 24, 25, CLRS 12)}
 A binary tree that maintains a sorted order.
 
-\subsubsection*{The BST Invariant}
+\subsubsection{The BST Invariant}
 For any node $x$ in the tree:
 \begin{itemize}
     \item All keys in $x$'s \textbf{left} subtree are $\le \text{key}(x)$.
@@ -15,7 +15,7 @@ For any node $x$ in the tree:
 \textbf{Property (CLRS Thm 12.1):} An \texttt{InorderTraversal} of a BST outputs its elements in sorted order.
 \textit{Proof (by induction):} A subtree of 1 node is sorted. Assume Inorder($T_L$) and Inorder($T_R$) are sorted. Then Inorder($T$) = [Inorder($T_L$)] + [root] + [Inorder($T_R$)]. By the BST invariant, all items in $T_L \le$ root $\le$ all items in $T_R$. Thus, the full list is sorted.
 
-\subsubsection*{Operations (all $O(h)$, where $h$ is tree height)}
+\subsubsection{Operations (all $O(h)$, where $h$ is tree height)}
 \begin{description}
     \item[\texttt{Search(k)}] Start at root. If $k < \text{key}(x)$, go left. If $k > \text{key}(x)$, go right. If $x=$ NULL, $k$ is not found.
     \item[\texttt{Minimum(x)}] Start at $x$, follow \texttt{left} child pointers until NULL.
@@ -24,7 +24,7 @@ For any node $x$ in the tree:
 \end{description}
 \textbf{Theorem 12.4 (CLRS):} The expected height of a \textbf{randomly built} BST on $n$ distinct keys is $\mathbf{O(\log n)}$. This means that on average, all operations are efficient.
 
-\subsubsection*{Successor(x) (Lec 25, CLRS 12.2)}
+\subsubsection{Successor(x) (Lec 25, CLRS 12.2)}
 Finds the node with the smallest key that is \textit{larger} than $\text{key}(x)$.
 \begin{itemize}
     \item \textbf{Case 1: $x$ has a right subtree.}
@@ -33,7 +33,7 @@ Finds the node with the smallest key that is \textit{larger} than $\text{key}(x)
     Go up the tree using \texttt{parent} pointers. The successor is the \textbf{first ancestor} $y$ such that $x$ is in the \textbf{left subtree} of $y$. (This is the first "right turn" you take on the path up). If you reach the root and no such $y$ exists, $x$ was the maximum.
 \end{itemize}
 
-\subsubsection*{Delete(z) (Lec 25, CLRS 12.3)}
+\subsubsection{Delete(z) (Lec 25, CLRS 12.3)}
 This is the most complex operation, formalized by CLRS with a helper `TRANSPLANT(u, v)` which replaces subtree $u$ with subtree $v$.
 \begin{itemize}
     \item \textbf{Case 1: $z$ has no left child.}
@@ -55,7 +55,7 @@ This is the most complex operation, formalized by CLRS with a helper `TRANSPLANT
 \end{itemize}
 \textbf{Problem:} All operations are $O(h)$. If keys are inserted in sorted order, the tree becomes a linked list with $h=O(n)$. Operations degrade to $O(n)$.
 
-\subsection*{Augmented BSTs (Lec 26)}
+\subsection{Augmented BSTs (Lec 26)}
 \textbf{Idea:} Store extra data in each node to answer new types of queries.
 \begin{itemize}
     \item \textbf{Rule:} The augmented data must be computable from the node's key and its children's augmented data in $O(1)$ time.
@@ -64,7 +64,7 @@ This is the most complex operation, formalized by CLRS with a helper `TRANSPLANT
     \item \textbf{New Operation: \texttt{Rank(t)}} (How many nodes are $\le t$?) in $O(h)$.
 \end{itemize}
 
-\subsection*{AVL Trees (Self-Balancing BST) (Lec 27, 28, 29)}
+\subsection{AVL Trees (Self-Balancing BST) (Lec 27, 28, 29)}
 \textbf{Goal:} Guarantee $h = O(\log n)$ by keeping the tree balanced.
 \begin{description}
     \item[AVL Property (Height-Balance)] For \textit{every} node $x$, the heights of its children can differ by at most 1:
@@ -72,7 +72,7 @@ This is the most complex operation, formalized by CLRS with a helper `TRANSPLANT
     \item[Complexity] All BST operations are guaranteed $\mathbf{O(\log n)}$.
 \end{description}
 
-\subsubsection*{Insert \& Delete in AVL Trees}
+\subsubsection{Insert \& Delete in AVL Trees}
 \begin{enumerate}
     \item Perform the standard BST `Insert` or `Delete`.
     \item Walk back up from the modified node to the root, updating the `height` of each ancestor.
@@ -81,7 +81,7 @@ This is the most complex operation, formalized by CLRS with a helper `TRANSPLANT
     \item \textit{Proof of Correctness (Insert):} `Insert` requires at most 1 (single or double) rotation. The rotation at $z$ is designed such that the \textbf{new height} of the rotated subtree is the \textbf{same as the height of $z$ before the insertion}. This means no ancestors above $z$ become unbalanced.
     \item \textit{Delete:} May require $O(\log n)$ rotations as you travel up, as a rotation at one node might unbalance its parent.
 \end{enumerate}
-\subsubsection*{Rotations (The Fix)}
+\subsubsection{Rotations (The Fix)}
 Let $z$ be the unbalanced node, $y$ be its taller child, and $x$ be $y$'s taller child.
 \begin{description}
     \item[Case 1: Left-Left] (Single \textbf{Right Rotation} at $z$)
@@ -90,7 +90,7 @@ Let $z$ be the unbalanced node, $y$ be its taller child, and $x$ be $y$'s taller
     \item[Case 4: Right-Left] (\textbf{Right Rotation} at $y$, then \textbf{Left Rotation} at $z$)
 \end{description}
 
-\subsection*{(2,4) Trees (Lec 30, 31, GTM 10.4)}
+\subsection{(2,4) Trees (Lec 30, 31, GTM 10.4)}
 A balanced M-way tree ($M=4$) where nodes can hold multiple keys.
 \begin{description}
     \item[Size Property] Every internal node has 2, 3, or 4 children (and 1, 2, or 3 keys).
@@ -98,7 +98,7 @@ A balanced M-way tree ($M=4$) where nodes can hold multiple keys.
     \item[Height] $h = \mathbf{O(\log n)}$ (proven by $\min$ 2 children/node $\to$ $h \le \log_2 n$).
 \end{description}
 
-\subsubsection*{Insert in (2,4)-Tree}
+\subsubsection{Insert in (2,4)-Tree}
 \begin{enumerate}
     \item \texttt{Search} to find the correct leaf node to insert $k$.
     \item \textbf{If leaf has < 3 keys:} Add $k$ to the node. Done.
@@ -113,7 +113,7 @@ A balanced M-way tree ($M=4$) where nodes can hold multiple keys.
 \end{enumerate}
 \textbf{Correctness:} The split operation is the only structural change, and it perfectly maintains the (2,4) properties (size and depth).
 
-\subsubsection*{Delete (Bottom-Up) (GTM 10.4.3)}
+\subsubsection{Delete (Bottom-Up) (GTM 10.4.3)}
 \begin{enumerate}
     \item \texttt{Search} for key $k$. If $k$ is not in a leaf, swap it with its successor (which must be in a leaf).
     \item Remove $k$ from the leaf node.
@@ -125,7 +125,7 @@ A balanced M-way tree ($M=4$) where nodes can hold multiple keys.
     \end{itemize}
 \end{enumerate}
 
-\subsubsection*{Delete (Top-Down / Pre-emptive)}
+\subsubsection{Delete (Top-Down / Pre-emptive)}
 \textbf{Idea:} Ensures we never delete from a minimal node (1-key node), avoiding upward propagation.
 \begin{enumerate}
     \item \textbf{Handle Non-Leaf:} If $k$ is in an internal node, swap it with its inorder successor (which is in a leaf). The problem is now to delete the successor from a leaf.
@@ -141,7 +141,7 @@ A balanced M-way tree ($M=4$) where nodes can hold multiple keys.
 \end{enumerate}
 
 
-\subsection*{B-Trees (Lec 32, CLRS 18)}
+\subsection{B-Trees (Lec 32, CLRS 18)}
 The generalization of (2,4)-trees, ideal for disk-based memory.
 \begin{description}
     \item[Properties (min-degree $t$)]
@@ -154,10 +154,10 @@ The generalization of (2,4)-trees, ideal for disk-based memory.
     \item[Height] $h = O(\log_t n)$. This is excellent for disk, as $t$ can be large (e.g., 1000), making $h$ very small.
 \end{description}
 
-\subsubsection*{Search in B-Tree (CLRS 18.2)}
+\subsubsection{Search in B-Tree (CLRS 18.2)}
 $O(t)$ work per node, but $O(1)$ disk access. Total disk accesses: $\mathbf{O(\log_t n)}$.
 
-\subsubsection*{Insert in B-Tree (CLRS 18.3)}
+\subsubsection{Insert in B-Tree (CLRS 18.3)}
 \textbf{Idea:} Avoids the "underflow-propagation" of (2,4) trees by being \textbf{pre-emptive}. We never insert into a full node.
 \begin{enumerate}
     \item Start at root. As we traverse \textit{down} to find the leaf:

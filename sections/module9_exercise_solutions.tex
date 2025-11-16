@@ -1,12 +1,12 @@
 % --- MODULE 9: Exercise & Challenge Solutions ---
 % --- Sourced from Lecture Slides & CLRS ---
 
-\section*{Module 9: Exercise \& Challenge Solutions}
+\section{Module 9: Exercise \& Challenge Solutions}
 This module contains the solutions to the exercises and challenges presented in the lecture slides.
 
-\subsection*{Module 2: Stacks \& Queues}
+\subsection{Module 2: Stacks \& Queues}
 
-\subsubsection*{Problem: Efficient Array-Based Queue (Lec 8, Slide 54)}
+\subsubsection{Problem: Efficient Array-Based Queue (Lec 8, Slide 54)}
 \begin{itemize}
     \item \textbf{Problem:} Provide an efficient array-based implementation of a queue that requires $O(n)$ space (where $n$ is max size) but $n$ is not known beforehand.
     \item \textbf{Solution Idea:} Combine two techniques from the lectures.
@@ -21,9 +21,9 @@ This module contains the solutions to the exercises and challenges presented in 
     \item \textbf{Result:} All operations (`Enqueue`, `Dequeue`) achieve $\mathbf{O(1)}$ amortized time complexity.
 \end{itemize}
 
-\subsection*{Module 3: Trees \& Traversals}
+\subsection{Module 3: Trees \& Traversals}
 
-\subsubsection*{Problem: Traversal via Stacks and Queues (Lec 14, Slide 31)}
+\subsubsection{Problem: Traversal via Stacks and Queues (Lec 14, Slide 31)}
 \begin{itemize}
     \item \textbf{Level-Order (using a Queue):} This is the BFS algorithm.
     \begin{enumerate}
@@ -51,7 +51,7 @@ This module contains the solutions to the exercises and challenges presented in 
     \end{enumerate}
 \end{itemize}
 
-\subsubsection*{Problem: Count Trees from Level-Order (Lec 14, Slide 32)}
+\subsubsection{Problem: Count Trees from Level-Order (Lec 14, Slide 32)}
 \begin{itemize}
     \item \textbf{Challenge:} "How many binary trees have the sequence ABCDEFG as their level-order traversal?"
     \item \textbf{Solution:} The level-order traversal sequence does \textit{not} uniquely define a binary tree, because it does not encode `NULL` children.
@@ -60,9 +60,9 @@ This module contains the solutions to the exercises and challenges presented in 
     \item \textbf{Conclusion:} There are many possible trees. However, as noted on Lec 14, Slide 47, if the tree is constrained to be an \textbf{Almost Complete Binary Tree}, the sequence uniquely defines \textbf{exactly one} tree.
 \end{itemize}
 
-\subsection*{Module 6: BSTs \& AVL Trees}
+\subsection{Module 6: BSTs \& AVL Trees}
 
-\subsubsection*{Problem: Inorder Traversal of BST is Sorted (Lec 25, Slide 6)}
+\subsubsection{Problem: Inorder Traversal of BST is Sorted (Lec 25, Slide 6)}
 \begin{itemize}
     \item \textbf{Proof (by Induction):}
     \item \textbf{Base Case:} $n=0$ (empty tree) or $n=1$ (root only). The traversal is empty or has one node, which is sorted.
@@ -78,7 +78,7 @@ This module contains the solutions to the exercises and challenges presented in 
     \end{enumerate}
 \end{itemize}
 
-\subsubsection*{Problem: Find All Occurrences of Key k (Lec 25, Slide 17)}
+\subsubsection{Problem: Find All Occurrences of Key k (Lec 25, Slide 17)}
 \begin{itemize}
     \item \textbf{Problem:} Design an algorithm to find all occurrences of $k$.
     \item \textbf{Solution Idea:} The standard `Search` stops at the first $k$. Since duplicates $\le k$ can be in the left subtree and $\ge k$ can be in the right, we must search both.
@@ -97,7 +97,7 @@ This module contains the solutions to the exercises and challenges presented in 
     \item \textbf{Complexity:} $O(h + c)$, where $h$ is tree height and $c$ is the number of occurrences.
 \end{itemize}
 
-\subsubsection*{Problem: Compute Predecessor (Lec 25, Slide 32)}
+\subsubsection{Problem: Compute Predecessor (Lec 25, Slide 32)}
 \begin{itemize}
     \item \textbf{Problem:} Modify the `Successor` algorithm to compute `Predecessor(x)`.
     \item \textbf{Solution Idea:} This is the symmetric (mirror-image) of `Successor`.
@@ -111,7 +111,7 @@ This module contains the solutions to the exercises and challenges presented in 
     \item \textbf{Complexity:} $O(h)$.
 \end{itemize}
 
-\subsubsection*{Problem: Expected Height of Random BST (Lec 25, Slide 52)}
+\subsubsection{Problem: Expected Height of Random BST (Lec 25, Slide 52)}
 \begin{itemize}
     \item \textbf{Problem:} What is the expected height of a BST constructed from a random permutation of $\{1, \dots, n\}$?
     \item \textbf{Solution (from CLRS 12.4):}
@@ -121,7 +121,7 @@ This module contains the solutions to the exercises and challenges presented in 
     \item The analysis of this recurrence (which is very similar to the analysis of randomized quicksort) shows that $E[X\_n] = O(\log n)$.
 \end{itemize}
 
-\subsubsection*{Problem: Maintain Subtree Size in BST (Lec 26, Slide 5)}
+\subsubsection{Problem: Maintain Subtree Size in BST (Lec 26, Slide 5)}
 \begin{itemize}
     \item \textbf{Problem:} Update `Insert` and `Delete` to maintain the `size` field at every node.
     \item \textbf{Solution (`size(x) = size(x.left) + size(x.right) + 1`):}
@@ -138,7 +138,7 @@ This module contains the solutions to the exercises and challenges presented in 
     \item \textbf{Complexity:} Both operations remain $O(h)$.
 \end{itemize}
 
-\subsubsection*{Problem: AVL Rotation Height Proof (Lec 28, Slides 42, 47)}
+\subsubsection{Problem: AVL Rotation Height Proof (Lec 28, Slides 42, 47)}
 \begin{itemize}
     \item \textbf{Problem:} In Case 1(a) (Right-Rotate) and Case 2(a) (Left-Rotate), prove the middle subtree (yellow box) must have height $h-3$.
     \item \textbf{Proof (for Case 1a / Right-Rotate):}

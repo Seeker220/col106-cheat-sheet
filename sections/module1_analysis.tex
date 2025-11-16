@@ -1,15 +1,15 @@
 % --- MODULE 1: Algorithm Analysis & Amortization ---
 % --- LECTURES 1, 2, 3, 9 & CLRS 16 ---
 
-\section*{Module 1: Algorithm Analysis \& Amortization}
+\section{Module 1: Algorithm Analysis \& Amortization}
 
-\subsection*{Core Concepts}
+\subsection{Core Concepts}
 \begin{description}
     \item[Worst-Case Analysis] (Lec 2) Measures the maximum number of operations an algorithm will perform for any input of size $n$. This is the standard for analysis in this course.
     \item[Amortized Analysis] (Lec 9, CLRS 16) Analyzes a \textit{sequence} of operations to find the average cost per operation in the worst case. It is \textbf{not} the same as average-case analysis.
 \end{description}
 
-\subsection*{Asymptotic Notations (Lec 3)}
+\subsection{Asymptotic Notations (Lec 3)}
 \noindent For a given time function $T(n) \ge 0$:
 \begin{description}
     \item[$O(f(n))$ (Big-Oh)] (Upper Bound) $\exists$ positive constants $c, n_0$ such that $T(n) \le c \cdot f(n)$ for all $n \ge n_0$.
@@ -17,18 +17,18 @@
     \item[$\Theta(f(n))$ (Big-Theta)] (Tight Bound) $\exists$ positive constants $c_1, c_2, n_0$ s.t. $c_1 f(n) \le T(n) \le c_2 f(n)$ for all $n \ge n_0$. (This means $T(n)$ is $O(f(n))$ and $\Omega(f(n))$).
 \end{description}
 
-\subsection*{Common Growth Rates (Lec 3)}
+\subsection{Common Growth Rates (Lec 3)}
 $O(1) \subset O(\log n) \subset O(n) \subset O(n \log n) \subset O(n^2) \subset O(n^k) \subset O(2^n) \subset O(n!)$
 
-\subsection*{Amortized Analysis Methods (Lec 9, CLRS 16)}
-\subsubsection*{1. Aggregate Analysis (Lec 9)}
+\subsection{Amortized Analysis Methods (Lec 9, CLRS 16)}
+\subsubsection{1. Aggregate Analysis (Lec 9)}
 Show that for a sequence of $n$ operations, the total cost $T(n)$ is $O(f(n))$. The amortized cost per operation is then $T(n)/n$.
 \begin{itemize}
     \item \textbf{Binary Counter ($n$ increments):} Total cost = $\sum_{i=0}^{\log n} \frac{n}{2^i} \approx 2n = O(n)$. Amortized cost = $\mathbf{O(1)}$.
     \item \textbf{Dynamic Array (Push):} Total cost for $n$ pushes = $O(n)$ (for $n$ pushes) + $O(n)$ (for all copying). Amortized cost = $\mathbf{O(1)}$.
 \end{itemize}
 
-\subsubsection*{2. Accounting Method (CLRS 16.2)}
+\subsubsection{2. Accounting Method (CLRS 16.2)}
 Assign different \textit{amortized costs} ($\hat{c}$) to operations.
 \begin{itemize}
     \item If $\hat{c} > c$ (actual cost), the extra charge is stored as \textbf{credit} on the data structure.
@@ -43,7 +43,7 @@ Assign different \textit{amortized costs} ($\hat{c}$) to operations.
     \end{itemize}
 \end{itemize}
 
-\subsubsection*{3. Potential Method (CLRS 16.3)}
+\subsubsection{3. Potential Method (CLRS 16.3)}
 Define a potential function $\Phi$ that maps the data structure $D$ to a number.
 \begin{itemize}
     \item $\Phi(D_0) = 0$ and $\Phi(D_i) \ge 0$ for all $i$.
